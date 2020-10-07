@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>angular_API</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Model\PageModel\**" />
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="Model\PageModel\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="Model\PageModel\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="Model\PageModel\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Model\EFModel\ExpertQAContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Model\PageModel\Admin\AdminManage\AdminGroupModel.cs" />
+    <Compile Include="Model\PageModel\Admin\AdminManage\AdminLogModel.cs" />
+    <Compile Include="Model\PageModel\Admin\AdminManage\AdminMenuModel.cs" />
+    <Compile Include="Model\PageModel\Admin\AdminManage\AdminModel.cs" />
+    <Compile Include="Model\PageModel\LoginModel.cs" />
+    <Compile Include="Model\PageModel\Log\BrowseLogModel.cs" />
+    <Compile Include="Model\PageModel\APIReturn.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.8.1" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.0.1" />
+    <PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Library\Library.csproj" />
+  </ItemGroup>
+
+</Project>

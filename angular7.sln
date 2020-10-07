@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library", "Library\Library.csproj", "{6817D0DC-4A99-46A9-8526-4EC37B06E1A6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "angular_API", "angular7_API\angular_API.csproj", "{8D7A46E4-9724-434F-ACAF-3FE7A0ACE1DA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6817D0DC-4A99-46A9-8526-4EC37B06E1A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6817D0DC-4A99-46A9-8526-4EC37B06E1A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6817D0DC-4A99-46A9-8526-4EC37B06E1A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6817D0DC-4A99-46A9-8526-4EC37B06E1A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D7A46E4-9724-434F-ACAF-3FE7A0ACE1DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D7A46E4-9724-434F-ACAF-3FE7A0ACE1DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D7A46E4-9724-434F-ACAF-3FE7A0ACE1DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D7A46E4-9724-434F-ACAF-3FE7A0ACE1DA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B8C91129-A3BF-411A-8946-A60E483F56F0}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,106 @@
+<div id="page-wrapper">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="page-header">{{title}}</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+  </div>
+  <!-- /.row -->
+  <div class="form-group">
+    <div class="row">
+      <div class="col-sm-3">
+        <label for="status">權限</label>
+      </div>
+      <div class="col-sm-3">
+        <input type="text" class="form-control" id="codename" name="codename" #codename="ngModel" [(ngModel)]="formData.permissionData.codeName"
+          required [disabled]="state==='detail'">
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="row">
+      <div class="col-sm-3">
+        <label for="status">狀態</label>
+      </div>
+      <div class="col-sm-3">
+        <span *ngIf="status.invalid && (status.dirty || status.touched)">
+          <span class="invalidMessage" *ngIf="isEnable?.errors.required">*此欄必填</span>
+        </span>
+        <select class="form-control" id="status" name="status" #status="ngModel" [(ngModel)]="formData.permissionData.isEnable"
+          [disabled]="state==='detail'">
+          <option [ngValue]=true>啟用</option>
+          <option [ngValue]=false>停用</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <form #memberCreateForm='ngForm'>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-12">
+            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+
+              <!-- when: hasChild (最上層的節點) -->
+              <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+                <!-- 樹最前面的展開符號 -->
+                <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.filename">
+                  <mat-icon class="mat-icon-rtl-mirror">
+                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                  </mat-icon>
+                </button>
+                <!-- 樹最前面的勾勾，打勾會選取下層所有項目 -->
+                <mat-checkbox
+                [checked]="descendantsAllSelected(node)"
+                [indeterminate]="descendantsPartiallySelected(node)"
+                (change)="todoItemSelectionToggle(node)">
+                  ({{node.id}}) - {{node.item}}
+                </mat-checkbox>
+
+                <!-- 這段是要新增資料才要打開的 -->
+                <!-- <button mat-icon-button (click)="addNewItem(node)">
+                  <mat-icon>add</mat-icon>
+                </button> -->
+              </mat-tree-node>
+
+              <!-- 除了最上層以外的子節點 -->
+              <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
+                <button mat-icon-button disabled></button>
+                <mat-checkbox class="checklist-leaf-node" [checked]="checklistSelection.isSelected(node)" (change)="checklistSelection.toggle(node);">
+                  ({{node.id}}) - {{node.item}}
+                </mat-checkbox>
+              </mat-tree-node>
+
+              <!-- 這段是要新增資料才要打開的 -->
+              <mat-tree-node *matTreeNodeDef="let node; when: hasNoContent" matTreeNodePadding>
+                <button mat-icon-button disabled></button>
+                <mat-form-field>
+                  <input matInput #itemValue placeholder="New item...">
+                </mat-form-field>
+                <button mat-button (click)="saveNode(node, itemValue.value)">Save</button>
+              </mat-tree-node>
+            </mat-tree>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="btn-footer">
+        <div class="row">
+          <div class="col-sm-1">
+            <button type="submit" class="btn btn-footer btn-success" [disabled]="!memberCreateForm.form.valid" (click)='submitGroupData()' *ngIf="state!=='detail'">
+              {{submitButtonText}}
+              <i class=" fa fa-chevron" aria-hidden="true "></i>
+            </button>
+          </div>
+          <div class="col-sm-1">
+            <button type="submit" class="btn btn-footer btn-danger" (click)='backPreviousPage()'>
+              <i class=" fa fa-chevron" aria-hidden="true "></i>取消
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- /.row -->
+</div>

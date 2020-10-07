@@ -1,0 +1,114 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">後台帳號管理</h1>
+        </div>
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-3">
+                <mat-form-field>
+                    <input matInput placeholder="姓名" [(ngModel)]="searchCondition.name">
+                </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+                <mat-form-field>
+                    <input id = "test" matInput placeholder="帳號" [(ngModel)]="searchCondition.account">
+                </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+                <mat-form-field>
+                    <input matInput placeholder="Email" [(ngModel)]="searchCondition.email">
+                </mat-form-field>
+            </div>
+            <div class="col-sm-3" style="text-align: right;">
+                <button mat-button mat-stroked-button color="primary" (click)='CreateAdmin()'>新增帳號</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <mat-form-field>
+                    <mat-select placeholder="狀態" [(ngModel)]="searchCondition.isEnable">
+                        <mat-option *ngFor="let option of statusOptions" [value]="option.isEnable">
+                            {{option.optionName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <mat-checkbox class="col-sm-2" [(ngModel)]="isSelectAllGroup" (change)="SelectAllGroups()">全選</mat-checkbox>
+            </div>
+            <div class="col-sm-12">
+                <mat-checkbox class="col-sm-2" *ngFor="let group of groupData" [(ngModel)]="group.isChecked" (change)="DisSelectAllGroups()">{{group.codeName}}</mat-checkbox>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <button class="col-sm-2" mat-button mat-raised-button color="primary" (click)='Search()'>查詢</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table" mat-table [dataSource]="dataSource" matSort>
+
+                <!-- 定義欄位 -->
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                    <td mat-cell *matCellDef="let admin"> {{admin.id}} </td>
+                </ng-container>
+
+                <!-- 定義欄位 -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> 姓名 </th>
+                    <td mat-cell *matCellDef="let admin"> {{admin.name}} </td>
+                </ng-container>
+
+                <!-- 定義欄位 -->
+                <ng-container matColumnDef="account">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> 帳號 </th>
+                    <td mat-cell *matCellDef="let admin" (click)='DetailAdmin(admin)'> <a>{{admin.account}}</a>
+                    </td>
+                </ng-container>
+
+                <!-- 定義欄位 -->
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+                    <td mat-cell *matCellDef="let admin"> {{admin.email}} </td>
+                </ng-container>
+
+                <!-- 定義欄位 -->
+                <ng-container matColumnDef="groupsName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> 權限 </th>
+                    <td mat-cell *matCellDef="let admin"> {{admin.groupsName}} </td>
+                </ng-container>
+
+                <!-- 定義欄位 -->
+                <ng-container matColumnDef="isEnable">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> 狀態 </th>
+                    <td mat-cell *matCellDef="let admin" [ngStyle]="{ 'color': admin.isEnable  ? 'green' : 'red'}">
+                        {{admin.isEnable ? '啟用' : '停用' }} </td>
+                </ng-container>
+
+                <!-- 定義欄位 -->
+                <ng-container matColumnDef="operater">
+                    <th mat-header-cell *matHeaderCellDef> 操作 </th>
+                    <td mat-cell *matCellDef="let admin">
+                        <i class="material-icons btn btn-outline btn-primary" (click)='EditAdmin(admin)' matTooltip="編輯">edit</i>
+                        <i class="material-icons btn btn-outline btn-primary" (click)='DeleteAdmin(admin)' matTooltip="刪除">delete</i>
+                    </td>
+                </ng-container>
+
+                <!-- 表頭 -->
+                <tr mat-header-row *matHeaderRowDef="['id', 'name', 'account', 'email', 'groupsName', 'isEnable', 'operater']"></tr>
+                <!-- 內容 -->
+                <tr mat-row [ngClass]="{'table_Zebra': index%2 == 0}" *matRowDef="let row;let index = index; columns: ['id', 'name', 'account', 'email', 'groupsName', 'isEnable', 'operater'];"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[10, 30, 50]" showFirstLastButtons></mat-paginator>
+        </div>
+        <!-- /.table-responsive -->
+    </div>
+    <!-- /.panel-body -->
+</div>
+<!-- /.panel -->

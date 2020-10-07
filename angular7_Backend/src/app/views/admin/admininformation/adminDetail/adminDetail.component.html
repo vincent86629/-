@@ -1,0 +1,106 @@
+<div id="page-wrapper">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="page-header">{{title}}</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <form #memberCreateForm='ngForm'>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-1">
+            <label>權限</label>
+          </div>
+          <div class="col-sm-11">
+
+            <div class="row">
+              <label class="radio-inline" *ngFor=" let formdata of formData.memberData.groups ">
+                <input type="checkbox" name="optionsCheckboxInline{{formdata.id}}" id="optionsCheckboxInline{{formdata.id}}"
+                  [checked]="formdata.isChecked===true" value="{{formdata.id}}" [disabled]="state==='detail'"
+                  [(ngModel)]="formdata.isChecked">{{formdata.codeName}}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-1">
+            <label for="username">姓名</label>
+          </div>
+          <div class="col-sm-11">
+            <span *ngIf="username.invalid && (username.dirty || username.touched)">
+              <span class="invalidMessage" *ngIf="username?.errors.required">*此欄必填</span>
+            </span>
+            <input type="text" class="form-control" id="username" name="username" #username="ngModel" [(ngModel)]="formData.memberData.name"
+              required placeholder="姓名" [disabled]="state==='detail'">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-1">
+            <label for="account">帳號</label>
+          </div>
+          <div class="col-sm-11">
+            <span *ngIf="account.invalid && (account.dirty || account.touched)">
+              <span class="invalidMessage" *ngIf="account?.errors.required">*此欄必填</span>
+            </span>
+            <input type="text" class="form-control" id="account" name="account" #account="ngModel" [(ngModel)]="formData.memberData.account"
+              required placeholder="帳號" [disabled]="state==='detail'">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-1">
+            <label for="email">信箱</label>
+          </div>
+          <div class="col-sm-11">
+            <span *ngIf="email.invalid && (email.dirty || email.touched)">
+              <span class="invalidMessage" *ngIf="email?.errors.required">*此欄必填</span>
+            </span>
+            <input type="text" class="form-control" id="email" name="email" #email="ngModel" [(ngModel)]="formData.memberData.email"
+              required placeholder="信箱" [disabled]="state==='detail'">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-1">
+            <label for="status">狀態</label>
+          </div>
+          <div class="col-sm-11">
+            <span *ngIf="status.invalid && (status.dirty || status.touched)">
+              <span class="invalidMessage" *ngIf="isEnable?.errors.required">*此欄必填</span>
+            </span>
+            <select class="form-control" id="status" name="status" #status="ngModel" [(ngModel)]="formData.memberData.isEnable"
+              [disabled]="state==='detail'">
+              <option [ngValue]=true>啟用</option>
+              <option [ngValue]=false>停用</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="btn-footer">
+        <div class="row">
+          <div class="col-sm-1">
+            <button type="submit" class="btn btn-footer btn-success" (click)='submitMemberData()' *ngIf="state!=='detail'">
+              <span *ngIf="state=='create'">新增</span>
+              <span *ngIf="state=='edit'">更新</span>
+              <i class=" fa fa-chevron" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="col-sm-1">
+            <button type="submit" class="btn btn-footer btn-danger" (click)='backPreviousPage()'>
+              <i class=" fa fa-chevron" aria-hidden="true"></i>取消
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- /.row -->
+</div>

@@ -1,0 +1,101 @@
+<!-- 已登入畫面 -->
+<div id="wrapper" *ngIf="appService.loginResponse.isLogin">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+    <app-nav-menu></app-nav-menu>
+  </nav>
+
+  <router-outlet></router-outlet>
+  <!-- /#page-wrapper -->
+</div>
+
+<!-- 未登入畫面 -->
+<div id="wrapper" *ngIf="!appService.loginResponse.isLogin">
+  <!-- 登入表單 -->
+  <div class="container" *ngIf="!forgetPassword">
+    <div class="card card-container">
+      <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+      <p id="profile-name" class="profile-name-card"></p>
+      <div class="form-signin">
+        <div class="row">
+          <div class="col-sm-12">
+            <input class="form-control inputAccount" (keyup.enter)="appService.Login()" [(ngModel)]="appService.loginRequest.account"
+              placeholder="Account" required autofocus>
+          </div>
+        </div>
+
+        <div class="row mt-10">
+          <div class="col-sm-12">
+            <input type="password" class="form-control inputPassword" (keyup.enter)="appService.Login()" [(ngModel)]="appService.loginRequest.password"
+              placeholder="Password" required>
+          </div>
+        </div>
+
+        <!-- <div id="remember" class="checkbox">
+                  <label>
+                      <input type="checkbox" value="remember-me"  [(ngModel)]="appService.loginRequest.rememberMe"> Remember me
+                  </label>
+              </div> -->
+        <div class="row mt-30 mb-10">
+          <div class="col-sm-12">
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" (click)="appService.Login()">登入</button>
+          </div>
+        </div>
+      </div>
+      <a (click)="ForgetPassword(true);" class="forgot-password">
+        忘記密碼
+      </a>
+      <ul>
+        <li *ngFor="let message of appService.loginResponse.messages">
+          {{message}}
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- 忘記密碼表單 -->
+  <div class="container" *ngIf="forgetPassword">
+    <div class="card card-container">
+      <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+      <p id="profile-name" class="profile-name-card"></p>
+      <div class="form-signin">
+        <div class="row">
+          <div class="col-sm-12">
+            <input class="form-control inputAccount" (keyup.enter)="appService.Login()" [(ngModel)]="appService.loginRequest.account"
+              placeholder="Account" required autofocus>
+          </div>
+        </div>
+        <div class="row mt-10">
+          <div class="col-sm-12">
+            <input type="email" class="form-control inputEmail" (keyup.enter)="appService.Login()" [(ngModel)]="appService.loginRequest.email"
+              placeholder="Email" required>
+          </div>
+        </div>
+        <div class="row mt-10">
+          <div class="col-sm-12">
+            <input type="password" class="form-control inputPassword" (keyup.enter)="appService.Login()" [(ngModel)]="appService.loginRequest.password"
+              placeholder="New Password" required>
+          </div>
+        </div>
+        <!-- <div id="remember" class="checkbox">
+                      <label>
+                          <input type="checkbox" value="remember-me"  [(ngModel)]="appService.loginRequest.rememberMe"> Remember me
+                      </label>
+                  </div> -->
+        <div class="row mt-30 mb-10">
+          <div class="col-sm-6">
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" (click)="appService.ResetPassword();">變更密碼</button>
+          </div>
+          <div class="col-sm-6">
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" (click)="ForgetPassword(false);">返回登入</button>
+          </div>
+        </div>
+      </div>
+      <ul>
+        <li *ngFor="let message of appService.loginResponse.messages">
+          {{message}}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

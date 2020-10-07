@@ -1,0 +1,148 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+.table_Zebra{
+  background-color: #eee8;
+}
+
+.btn-primary{
+  margin: 5px !important;
+}
+
+.btn-primary.btn-outline {
+  color: #428bca;
+  background-color: #fff;
+  margin: 5px !important;
+}
+
+.btn-primary:hover a{
+  color: #ffffff;
+}
+
+.verticalTable,
+.verticalTable tr th,
+.verticalTable tr td {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border: 2px solid #c2cfd6;
+  font-size: 16px;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+  height: 80%;
+}
+
+.verticalTable tr th {
+  width: 50%;
+}
+
+.verticalTable tr:nth-child(odd) {
+  background-color: #f5f5f5;
+
+}
+
+.verticalTable tr:nth-child(even) {
+  background-color: #fff;
+
+}
+
+html, body{ height: 100%; }
+html, body, .mat-table, .mat-tree, .mat-button, .mat-fab, .mat-flat-button, .mat-icon-button, .mat-mini-fab, .mat-raised-button, .mat-stroked-button {font-family: 'Noto Sans TC', sans-serif !important;}
+body {margin: 0;}
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+  vertical-align: middle !important;
+}
+
+.nav>li>a:focus, .nav>li>a:hover {
+  color: #ffffff !important;
+  background-color: #1f81c4 !important;
+}
+
+.page-header {
+  /* border-bottom: 1px solid #1f81c4 !important; */
+}
+
+.table-responsive{
+  margin-top: 50px;
+}
+
+tr.mat-header-row.ng-star-inserted th{
+  background-color: #1f81c4;
+}
+
+tr.mat-header-row.ng-star-inserted th,
+tr.mat-header-row.ng-star-inserted th button {
+  color: #ffffff;
+}
+
+.mat-sort-header-arrow {
+  color: #fff;
+}
+
+.mat-button.mat-primary,
+.mat-icon-button.mat-primary,
+.mat-stroked-button.mat-primary {
+  background-color: #ffffff;
+  border: 1px solid #1f81c4;
+  color: #1f81c4;
+  box-shadow: none;
+}
+
+.mat-button.mat-primary:hover,
+.mat-icon-button.mat-primary:hover,
+.mat-stroked-button.mat-primary:hover {
+  background-color: #1f81c4;
+  color: #ffffff;
+}
+
+.page-header {
+  color: #0060b7;
+  border-bottom: 5px solid #e5eff8 !important;
+}
+
+
+.SlideTitle{
+  width: 180px;
+  color: #0060b7;
+  position: relative;
+}
+.SlideShow{
+  cursor: pointer;
+}
+.SlideShow:after, .SlideShow:before{
+  content: '';
+  width: 15px;
+  height: 2px;
+  background-color: #0060b7;
+  display: inline-block;
+  position: absolute;
+  transform: translateY(-50%);
+  top: 50%;
+  right: 15px;
+}
+.SlideShow:before{
+  transform: translateY(-50%) rotate(0deg);
+  transition: .5s;
+}
+.card-header-line{
+  width:180px;border-bottom: 5px solid #e5eff8;
+}
+.card-body{
+  /* max-height: 1000px; */
+  overflow: hidden;
+  transition: 1s;
+}
+input[type='checkbox'].card-ani{
+  display: none;
+}
+input[type='checkbox']:checked ~ h5 label:before{
+  transform: translateY(-50%) rotate(90deg);
+  transition: .5s;
+}
+input[type='checkbox']:checked ~ .card-body{
+  max-height: 0;
+  transition: .8s;
+}

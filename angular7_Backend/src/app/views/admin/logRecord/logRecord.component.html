@@ -1,0 +1,119 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">後台Log紀錄</h1>
+        </div>
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-4">
+                <mat-form-field>
+                    <input matInput [matDatepicker]="picker1" placeholder="起始日期" [max]="maxDate" [(ngModel)]="formData.searchCondition.startDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+                <mat-form-field>
+                    <input matInput [matDatepicker]="picker2" placeholder="結束日期" [max]="maxDate" [(ngModel)]="formData.searchCondition.endDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <mat-form-field>
+                    <input matInput placeholder="操作者" [(ngModel)]="formData.searchCondition.operator">
+                </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+                <mat-form-field>
+                    <input matInput placeholder="IP" [(ngModel)]="formData.searchCondition.ip">
+                </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+                <mat-form-field>
+                    <input matInput placeholder="備註" [(ngModel)]="formData.searchCondition.remark">
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-2">
+                <mat-checkbox class="example-margin" [(ngModel)]="SelectAll" (change)="SelectAllChange()">全選</mat-checkbox>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <mat-checkbox class="example-margin" [(ngModel)]="formData.searchCondition.SelectLogin">登入</mat-checkbox>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <mat-checkbox class="example-margin" [(ngModel)]="formData.searchCondition.SelectLogout">登出</mat-checkbox>
+            </div>
+       
+        </div>
+
+        <div class="row">
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-outline btn-primary" (click)="LogRecordSearch()">查詢</button>
+            </div>
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-outline btn-primary" (click)="ClearCondition()">清除</button>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table" mat-table [dataSource]="dataSource" matSort>
+                <!-- 定義欄位 -->
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                    <td mat-cell *matCellDef="let log"> {{log.id}} </td>
+                </ng-container>
+
+                <!-- 定義欄位 -->
+                <ng-container matColumnDef="event">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> 事件 </th>
+                    <td mat-cell *matCellDef="let log"> {{log.event}} </td>
+                </ng-container>
+
+                <!-- 定義欄位 -->
+                <ng-container matColumnDef="operator">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> 操作者 </th>
+                    <td mat-cell *matCellDef="let log"> {{log.operator}} </td>
+                </ng-container>
+
+                <!-- 定義欄位 -->
+                <ng-container matColumnDef="requestTime">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> 時間 </th>
+                    <td mat-cell *matCellDef="let log"> {{log.requestTime | date:"yyyy/MM/dd hh:mm:ss"}} </td>
+                </ng-container>
+
+                <!-- 定義欄位 -->
+                <ng-container matColumnDef="ip">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> IP </th>
+                    <td mat-cell *matCellDef="let log"> {{log.ip}} </td>
+                </ng-container>
+
+                <!-- 定義欄位 -->
+                <ng-container matColumnDef="remark">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> 備註 </th>
+                    <td mat-cell *matCellDef="let log"> {{log.remark}} </td>
+                </ng-container>
+
+                <!-- 表頭 -->
+                <tr mat-header-row *matHeaderRowDef="['id', 'event', 'operator', 'requestTime', 'ip', 'remark']"></tr>
+                <!-- 內容 -->
+                <tr mat-row [ngClass]="{'table_Zebra': index%2 == 0}" *matRowDef="let row;let index = index; columns: ['id', 'event', 'operator', 'requestTime', 'ip', 'remark'];"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[10, 30, 50]" showFirstLastButtons></mat-paginator>
+        </div>
+        <!-- /.table-responsive -->
+    </div>
+    <!-- /.panel-body -->
+</div>
+<!-- /.panel -->
