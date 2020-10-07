@@ -26,8 +26,7 @@ namespace angular_API.Model.EFModel
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=104.42.40.253;Database=dbAngular7;user id=dbAngular7;password=dbAngular7");
+                optionsBuilder.UseSqlServer("Server=MSI\\SQLEXPRESS;Database=YangTingSecurity;user id=vincent;password=immie0983");
             }
         }
 

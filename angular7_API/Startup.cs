@@ -48,7 +48,7 @@ namespace angular_API
                     // CorsPolicy 是自訂的 Policy 名稱
                     options.AddPolicy("CorsPolicy", policy =>
                     {
-                        policy.WithOrigins("http://localhost:4200")
+                        policy.WithOrigins("*")
                               .AllowAnyHeader()
                               .AllowAnyMethod()
                               .AllowCredentials();

@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSortModule} from '@angular/material/sort';
 import { CookieService } from 'ngx-cookie-service';
 import { MyNewComponentComponent } from './views/my-new-component/my-new-component.component';
+import { VerifycodeComponent } from './views/verifycode/verifycode.component';
 
 
 
@@ -20,7 +21,8 @@ import { MyNewComponentComponent } from './views/my-new-component/my-new-compone
     AppComponent,
     NavMenuComponent,
     IndexComponent,
-    MyNewComponentComponent
+    MyNewComponentComponent,
+    VerifycodeComponent
   ],
   imports: [
     BrowserModule,
