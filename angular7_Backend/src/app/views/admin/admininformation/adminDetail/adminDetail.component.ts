@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HttpService } from '../../../../service/http-service/http.service';
 import { LogService } from '../../../../service/log-service/log.service';
 import { MatDialog } from '@angular/material';
-import { AddPostDialogComponent } from '../../add-post-dialog/add-post-dialog.component';
+import { AddPostDialogComponent } from '../../../../shared/add-post-dialog/add-post-dialog.component';
 
 @Component({
   selector: 'app-adminDetail',

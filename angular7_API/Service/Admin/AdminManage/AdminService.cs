@@ -15,12 +15,12 @@ namespace angular_API.Service.Admin.AdminManage
     public class AdminService
     {
         private readonly dbAngular_API_Context db;
-       
 
+        private readonly NotificationService _notificationService;
         public AdminService(dbAngular_API_Context db)
         {
             this.db = db;
-           
+            this._notificationService = new NotificationService();
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace angular_API.Service.Admin.AdminManage
             //使用這可進入頁面的parent
             var parents = db.MapPermissionMenu
                     .Where(x => permissions.Contains(x.PermissionId))
-                    .Select(a => a.Menu.ParentId )
+                    .Select(a => a.Menu.ParentId)
                     .Distinct();
 
             var res = db.TblMenu
@@ -148,7 +148,7 @@ namespace angular_API.Service.Admin.AdminManage
                      })
                      .ToList();
             }
-
+            res.Password = "";
             return res;
         }
 
@@ -208,6 +208,8 @@ namespace angular_API.Service.Admin.AdminManage
                     //更新資料
                     admin.Name = UpdateAdminModel.Name;
                     admin.Account = UpdateAdminModel.Account;
+                    if (!string.IsNullOrEmpty(admin.Password))
+                        admin.Password = SecurityTools.MD5encrypt(UpdateAdminModel.Password);
                     admin.Email = UpdateAdminModel.Email;
                     admin.Phone = UpdateAdminModel.Phone;
                     admin.EmployeeId = UpdateAdminModel.EmployeeId;
@@ -278,20 +280,10 @@ namespace angular_API.Service.Admin.AdminManage
                     db.SaveChanges();
 
                     returnMsg = "新增成功";
-
-                    //發通知
-                    //NotificationService.AddNotificationWithSend(
-                    //    new TblNotification()
-                    //    {
-                    //        //Id
-                    //        Type = "新增後台帳號通知",
-                    //        Subject = "新增後台帳號通知",
-                    //        Body = $"您的帳號 {newadmin.Account} 已開通，預設密碼為: {initPassword}，如須變更預設密碼，請至後台點選忘記密碼。",
-                    //        Recipient = !String.IsNullOrEmpty(newadmin.Email) ?
-                    //            JsonConvert.SerializeObject(new string[] { newadmin.Email }) : JsonConvert.SerializeObject(new string[] { }),
-                    //        Parameter = JsonConvert.SerializeObject(new string[] { }),
-                    //    }
-                    //    , true);
+                    _notificationService.SendEmail(
+                        newadmin.Email,
+                        "新增揚庭保全後台帳號通知",
+                        $"您的帳號 {newadmin.Account} 已開通，預設密碼為: {initPassword}。");
                 }
 
                 result = new APIReturn(APIReturnCode.Success, returnMsg);

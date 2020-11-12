@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { AppService } from './service/app-service/app.service';
-import { VerifycodeComponent } from './views/verifycode/verifycode.component';
-
+import { VerifycodeComponent } from './shared/verifycode/verifycode.component';
+// import { PrimeNGConfig } from 'primeng/api';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,10 +13,13 @@ export class AppComponent {
   @ViewChild('verifyCode') verifyCode: VerifycodeComponent; //获取页面中的验证码组件
   verifycode: string;
 
-  constructor(private appService: AppService) { }
+  constructor(private appService: AppService,
+    // private primengConfig: PrimeNGConfig
+    ) { }
   ngOnInit() {
     //檢查是否登入逾時，未逾時就自動登入
     this.appService.CheckLoginIsExpire();
+    // this.primengConfig.ripple = true;
   }
   Login() {
     if (!this.verifyCode.validate(this.verifycode)) { //this.code.value为用户输入的验证码

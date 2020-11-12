@@ -5,11 +5,7 @@ import { Router } from '@angular/router';
 import { HttpService } from '../../../service/http-service/http.service';
 import { LogService } from '../../../service/log-service/log.service';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
-import { AdminDetailComponent } from './adminDetail/adminDetail.component';
-import { AdminPermissionComponent } from '../adminPermission/adminPermissionList.component';
-import { AddPostDialogComponent } from '../add-post-dialog/add-post-dialog.component';
-import { LogRecordComponent } from '../logRecord/logRecord.component';
-import { text } from '@angular/core/src/render3/instructions';
+import { AddPostDialogComponent } from '../../../shared/add-post-dialog/add-post-dialog.component';
 
 @Component({
   selector: 'app-adminList',
@@ -86,9 +82,8 @@ export class AdminListComponent implements OnInit {
   //====================以下自訂函數=====================//
 
   Search() {
-
+    debugger;
     var data = this.adminData.adminList;
-
     //姓名
     if (this.searchCondition.name && this.searchCondition.name.length > 0) {
       data = data.filter(a => a.name.indexOf(this.searchCondition.name) > -1);
@@ -101,7 +96,6 @@ export class AdminListComponent implements OnInit {
     if (this.searchCondition.email && this.searchCondition.email.length > 0) {
       data = data.filter(a => a.email.indexOf(this.searchCondition.email) > -1);
     }
-
     //狀態
     if (this.searchCondition && (this.searchCondition.isEnable != null)) {
       data = data.filter(a => (a.isEnable == this.searchCondition.isEnable));

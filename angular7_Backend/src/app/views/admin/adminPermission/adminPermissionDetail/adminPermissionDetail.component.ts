@@ -10,7 +10,7 @@ import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 // tslint:disable-next-line:import-blacklist
 import { BehaviorSubject } from 'rxjs';
-import { AddPostDialogComponent } from '../../add-post-dialog/add-post-dialog.component';
+import { AddPostDialogComponent } from '../../../../shared/add-post-dialog/add-post-dialog.component';
 import { MatDialog } from '@angular/material';
 
 // 樹的結構

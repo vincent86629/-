@@ -2,13 +2,11 @@ import '../../../polyfills';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { HttpClientModule } from '@angular/common/http';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminListComponent } from './admininformation/adminList.component';
 import { AdminPermissionComponent } from './adminPermission/adminPermissionList.component';
 import { AdminDetailComponent } from './admininformation/adminDetail/adminDetail.component';
-
 import { AdminPermissionDetailComponent } from './adminPermission/adminPermissionDetail/adminPermissionDetail.component';
 import {
   MatButtonModule, //要用 Angular Material 要先在這 Import，才能在下面加入參考
@@ -29,12 +27,9 @@ import {
   MatDialogModule
 } from '@angular/material';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
-
 import { SharedModule } from '../../shared/shared.module';
 import { LogRecordComponent } from './logRecord/logRecord.component';
-import { AddPostDialogComponent } from './add-post-dialog/add-post-dialog.component';
-
-
+import { AddPostDialogComponent } from '../../shared/add-post-dialog/add-post-dialog.component';
 
 @NgModule({
   exports: [
@@ -73,8 +68,7 @@ export class MaterialModule { }
     HttpClientModule,
     ReactiveFormsModule,
     SharedModule,
-    MaterialModule, //這邊匯入上面定義的 Angular Material Module
-    //AddPostDialogComponent 
+    MaterialModule,
   ],
   declarations: [
     AdminListComponent,

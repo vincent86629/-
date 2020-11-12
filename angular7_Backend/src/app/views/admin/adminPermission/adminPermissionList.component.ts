@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { HttpService } from '../../../service/http-service/http.service';
 import { MatPaginator, MatSort, MatTableDataSource,MatDialog } from '@angular/material';
 import { LogService } from '../../../service/log-service/log.service';
-import { AddPostDialogComponent } from '../add-post-dialog/add-post-dialog.component';
+import { AddPostDialogComponent } from '../../../shared/add-post-dialog/add-post-dialog.component';
 @Component({
   selector: 'app-admin-permission',
   templateUrl: './adminPermissionList.component.html',

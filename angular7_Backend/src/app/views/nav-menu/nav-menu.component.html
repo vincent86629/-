@@ -1,35 +1,34 @@
 <div class="navbar-header col-sm-12">
-  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
     <span class="sr-only">Toggle navigation</span>
     <span class="icon-bar"></span>
     <span class="icon-bar"></span>
     <span class="icon-bar"></span>
   </button>
-  <a class="navbar-brand" href="index.html">揚庭保全</a>
-  <button type="button" (click)="appService.Logout()"
-    class="pull-right mat-button mat-stroked-button mat-primary Logout">
+    <a class="navbar-brand" href="index.html">揚庭保全</a>
+    <button type="button" (click)="appService.Logout()" class="pull-right mat-button mat-stroked-button mat-primary Logout">
     {{appService.loginResponse.adminInfo.name}} | 登出
   </button>
 </div>
 <!-- /.navbar-header -->
 
 <div class="navbar-default sidebar" role="navigation">
-  <div class="sidebar-nav navbar-collapse">
-    <ul class="nav" id="side-menu">
+    <div class="sidebar-nav navbar-collapse">
+        <ul class="nav" id="side-menu">
 
-      <li *ngFor="let level1 of adminMenuData">
-        <a href="#"><i class="fa fa-navicon fa-fw"></i>{{level1.name}}<span class="fa arrow"></span></a>
-        <ul class="nav nav-second-level">
-          <li [routerLinkActive]='["link-active"]' *ngFor="let level2 of level1.childs">
-            <a [routerLink]='level2.url'> {{level2.name}}
+            <li *ngFor="let level1 of adminMenuData">
+                <a href="#"><i class="fa fa-navicon fa-fw"></i>{{level1.name}}<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li [routerLinkActive]='["link-active"]' *ngFor="let level2 of level1.childs">
+                        <a class="text-warning" [routerLink]='level2.url'> {{level2.name}}
             </a>
-          </li>
-        </ul>
-        <!-- /.nav-second-level -->
-      </li>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
 
-    </ul>
-  </div>
-  <!-- /.sidebar-collapse -->
+        </ul>
+    </div>
+    <!-- /.sidebar-collapse -->
 </div>
 <!-- /.navbar-static-side -->

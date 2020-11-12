@@ -1,31 +1,44 @@
 /* Highlighting rules for nav menu items */
-.mat-stroked-button{
-  margin: 7px;
+
+.mat-stroked-button {
+    margin: 7px;
 }
+
+li a {
+    color: #f2ab39;
+}
+
 li.link-active a,
 li.link-active a:hover,
 li.link-active a:focus {
-    background-color: #4189C7;
+    background-color: #f2ab39;
     color: white;
 }
 
-.navbar-default{background-color: #ffffff;}
-.navbar-header .navbar-brand {color: #ffffff;}
-
-.Logout{
-  margin: 7px;
-  background-color: #ffffff;
-  border-color: #1f81c4;
-  color: #1f81c4;
+.navbar-default {
+    background-color: #ffffff;
 }
 
-.sidebar ul li {border-bottom: 1px solid #1f81c4;}
+.navbar-header .navbar-brand {
+    color: #ffffff;
+}
 
-.navbar-header .navbar-toggle .icon-bar{
-  background-color: #ffffff !important;
+.Logout {
+    margin: 7px;
+    background-color: #ffffff;
+    border-color: #f2ab39;
+    color: #f2ab39;
+}
+
+.sidebar ul li {
+    border-bottom: 1px solid #f2ab39;
+}
+
+.navbar-header .navbar-toggle .icon-bar {
+    background-color: #ffffff !important;
 }
 
 .navbar-header .navbar-toggle:focus,
 .navbar-header .navbar-toggle:hover {
-  background-color: #0000;
+    background-color: #0000;
 }

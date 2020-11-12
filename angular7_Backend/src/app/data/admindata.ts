@@ -14,7 +14,7 @@ export class AdminData {
   password: string = "";
   email: string = "";
   phone: string = "";
-  isEnable: boolean = false;
+  isEnable: boolean = null;
   groups: GroupCheckData[] = [];
   groupsName: string = "";
   constructor() {}
@@ -24,8 +24,6 @@ export class GroupCheckData {
   id: number;
   codeName: string;
   isChecked: boolean;
-  // permissionMenus: Permission[] = [];  //DB撈出來的tree
-  // isEnable: boolean ;
   constructor() { }
 }
 /*-----管理者帳號管理 end-----*/
