@@ -9,6 +9,7 @@ namespace angular_API.Model.EFModel
         {
             MapPermissionMenu = new HashSet<MapPermissionMenu>();
             MapUserPermission = new HashSet<MapUserPermission>();
+            TblReport = new HashSet<TblReport>();
         }
 
         public int Id { get; set; }
@@ -17,5 +18,6 @@ namespace angular_API.Model.EFModel
 
         public ICollection<MapPermissionMenu> MapPermissionMenu { get; set; }
         public ICollection<MapUserPermission> MapUserPermission { get; set; }
+        public ICollection<TblReport> TblReport { get; set; }
     }
 }

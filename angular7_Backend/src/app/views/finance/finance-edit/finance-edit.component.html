@@ -1,3 +1,89 @@
-<p>
-  finance-edit works!
-</p>
+<div id="page-wrapper">
+    <!-- Editable table -->
+    <div class="card">
+        <h3 class="card-header text-center font-weight-bold text-uppercase py-4">公園2001住戶管理委員會109年08月收支表</h3>
+        <div class="card-body">
+            <div id="table" class="table-editable">
+                <table class="table table-bordered table-responsive-md table-striped text-center">
+                    <tr>
+                        <th colspan="2" class="text-center">日期</th>
+                        <th colspan="3" class="text-center">項目</th>
+                        <th colspan="1" class="text-center">收入</th>
+
+                        <th colspan="2" class="text-center">日期</th>
+                        <th colspan="3" class="text-center">項目</th>
+                        <th colspan="1" class="text-center">支出</th>
+
+                        <th colspan="1" class="text-center">活存餘額</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2" class="text-center"></th>
+                        <th colspan="10" class="text-center">上月存款簿活存餘額</th>
+                        <th colspan="1" class="text-center"></th>
+
+                    </tr>
+                    <ng-container *ngFor="let block of data.blocks;let i=index;let even = even">
+                        <ng-container *ngIf="even">
+                            <tr>
+                                <td colspan="2">
+                                </td>
+                                <td colspan="3">
+                                    <input [(ngModel)]="data.blocks[i].blockName" readonly>
+                                </td>
+                                <td colspan="1">
+                                </td>
+                                <td colspan="2">
+                                </td>
+                                <td colspan="3">
+                                    <input [(ngModel)]="data.blocks[i+1].blockName" readonly>
+                                </td>
+                                <td colspan="1">
+                                </td>
+                                <td colspan="1"></td>
+                            </tr>
+                            <tr *ngFor="let index of indexList;">
+                                <td colspan="2">
+                                    <input [matDatepicker]="picker" [(ngModel)]="data.blocks[i].rows[index].date">
+                                </td>
+                                <td colspan="3">
+                                    <input [(ngModel)]="data.blocks[i].rows[index].name">
+                                </td>
+                                <td colspan="1">
+                                    <input [(ngModel)]="data.blocks[i].rows[index].value">
+                                </td>
+                                <td colspan="2">
+                                    <input [matDatepicker]="picker" [(ngModel)]="data.blocks[i+1].rows[index].date">
+                                </td>
+                                <td colspan="3">
+                                    <input [(ngModel)]="data.blocks[i+1].rows[index].name">
+                                </td>
+                                <td colspan="1">
+                                    <input [(ngModel)]="data.blocks[i+1].rows[index].value">
+                                </td>
+                                <td colspan="1"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <input [(ngModel)]="data.blocks[i].totalName" readonly>
+                                </td>
+                                <td colspan="1">
+                                    <input [(ngModel)]="data.blocks[i].total" readonly>
+                                </td>
+                                <td colspan="5">
+                                    <input [(ngModel)]="data.blocks[i+1].totalName" readonly>
+                                </td>
+                                <td colspan="1">
+                                    <input [(ngModel)]="data.blocks[i+1].total" readonly>
+                                </td>
+                                <td colspan="1"></td>
+                            </tr>
+                        </ng-container>
+                    </ng-container>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Editable table -->
+</div>

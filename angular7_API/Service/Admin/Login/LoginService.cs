@@ -3,11 +3,14 @@ using angular_API.Model.PageModel;
 using angular_API.Model.PageModel.Admin.AdminManage;
 using angular_API.Service.Admin.AdminManage;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ShindaLibrary;
 using ShindaLibrary.Tools;
 using System;
 using System.Linq;
+using static angular_API.Model.PageModel.LoginResponse;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace angular_API.Service.Admin.SystemManage
 {
@@ -39,9 +42,9 @@ namespace angular_API.Service.Admin.SystemManage
             {
                 //輸入的帳號
                 var inputAccount = loginRequest.Account.Trim().ToUpper();
-
                 //尋找該帳號的後台管理者
                 var admin = db.TblAdmin
+                    .Include(a => a.MapUserPermission)
                     .Where(a => a.Account.ToUpper() == inputAccount && a.IsEnable)
                     .FirstOrDefault();
 
@@ -67,9 +70,25 @@ namespace angular_API.Service.Admin.SystemManage
                             Name = "登入成功",
                             Remark = "",
                         });
+                        var permissionIds = admin.MapUserPermission.Select(b => b.PermissionId).ToList();
+                        var adminInfo = new AdminInfoModel
+                        {
+                            Id = admin.Id,
+                            Account = admin.Account,
+                            Email = admin.Email,
+                            Name = admin.Name,
+                            IsEnable = admin.IsEnable,
+                            Phone = admin.Phone,
+                            EmployeeId = admin.EmployeeId,
+                            Permissions = db.TblPermission.Where(a => permissionIds.Contains(1) ? true : permissionIds.Contains(a.Id))
+                                                               .Select(a => new SelectListItem()
+                                                               {
+                                                                   Value = a.Id.ToString(),
+                                                                   Text = a.CodeName
+                                                               }).ToList(),
 
-                        admin.Password = ""; //敏感資料，不要送到前端
-                        response.AdminInfo = admin;
+                        };
+                        response.AdminInfo = adminInfo;
                     }
                     else //密碼不符
                     {
@@ -143,7 +162,7 @@ namespace angular_API.Service.Admin.SystemManage
                             admin.Password = inputPassword;
                             db.SaveChanges();
 
-                            
+
                             response.Messages.Add("密碼變更成功");
                         }
                         else

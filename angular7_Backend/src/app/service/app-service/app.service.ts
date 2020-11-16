@@ -96,7 +96,7 @@ export class AppService {
             //寫入登入資訊到 LocalStorage
             localStorage.setItem("Login_Info", JSON.stringify(result.adminInfo));
             localStorage.setItem("Login_ExpireDate", JSON.stringify(expireDate));
-            location.href="/index";
+            location.href = "/index";
           }
         });
     }
@@ -202,4 +202,5 @@ export class LoginResponse {
     this.messages = [];
     this.adminInfo = new AdminData();
   }
+
 }

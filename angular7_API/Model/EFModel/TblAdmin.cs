@@ -9,6 +9,7 @@ namespace angular_API.Model.EFModel
         {
             MapUserPermission = new HashSet<MapUserPermission>();
             TblOperationLog = new HashSet<TblOperationLog>();
+            TblReport = new HashSet<TblReport>();
         }
 
         public int Id { get; set; }
@@ -23,5 +24,6 @@ namespace angular_API.Model.EFModel
 
         public ICollection<MapUserPermission> MapUserPermission { get; set; }
         public ICollection<TblOperationLog> TblOperationLog { get; set; }
+        public ICollection<TblReport> TblReport { get; set; }
     }
 }

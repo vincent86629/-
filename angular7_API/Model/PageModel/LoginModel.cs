@@ -1,4 +1,5 @@
 ﻿using angular_API.Model.EFModel;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 
@@ -9,7 +10,7 @@ namespace angular_API.Model.PageModel
     public class AdminLoginPageModel
     {
         //登入資訊 (帳密)
-        public LoginRequest LoginRequest { get;set;}
+        public LoginRequest LoginRequest { get; set; }
 
         //登入人員資訊
         public LoginResponse LoginResponse { get; set; }
@@ -54,13 +55,20 @@ namespace angular_API.Model.PageModel
         public List<string> Messages { get; set; }
 
         //人員資訊
-        public  TblAdmin AdminInfo { get; set; }
+        public AdminInfoModel AdminInfo { get; set; }
+
+        //人員權限
 
         public LoginResponse()
         {
             this.IsLogin = false;
             this.Messages = new List<string>();
-            this.AdminInfo = new TblAdmin();
+            this.AdminInfo = new AdminInfoModel();
+        }
+        public class AdminInfoModel:TblAdmin
+        {
+            public List<SelectListItem> Permissions { get; set; } = new List<SelectListItem>();
+
         }
     }
 }

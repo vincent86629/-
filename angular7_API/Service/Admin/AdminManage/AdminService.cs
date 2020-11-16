@@ -2,7 +2,6 @@
 using angular_API.Model.PageModel;
 using angular_API.Model.PageModel.Admin.AdminManage;
 using angular_API.Service.Admin.SystemManage;
-using angular_API.Service.Admin.SystemManage;
 using Newtonsoft.Json;
 using ShindaLibrary.Tools;
 using System;

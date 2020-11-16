@@ -21,12 +21,16 @@ namespace angular_API.Model.EFModel
         public virtual DbSet<TblMenu> TblMenu { get; set; }
         public virtual DbSet<TblOperationLog> TblOperationLog { get; set; }
         public virtual DbSet<TblPermission> TblPermission { get; set; }
+        public virtual DbSet<TblReport> TblReport { get; set; }
+        public virtual DbSet<TblReportDetail> TblReportDetail { get; set; }
+        public virtual DbSet<TblReportFile> TblReportFile { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=MSI\\SQLEXPRESS;Database=YangTingSecurity;user id=vincent;password=immie0983");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Server=MSI\\SQLEXPRESS;Database=YangTingSecurity;Trusted_Connection=True;");
             }
         }
 
@@ -157,6 +161,78 @@ namespace angular_API.Model.EFModel
                 entity.Property(e => e.CodeName)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<TblReport>(entity =>
+            {
+                entity.ToTable("tbl_Report");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CreateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.PermissionId).HasColumnName("PermissionID");
+
+                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.YearMonth)
+                    .IsRequired()
+                    .HasMaxLength(6)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.CreateByNavigation)
+                    .WithMany(p => p.TblReport)
+                    .HasForeignKey(d => d.CreateBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tbl_Report_tbl_Admin");
+
+                entity.HasOne(d => d.Permission)
+                    .WithMany(p => p.TblReport)
+                    .HasForeignKey(d => d.PermissionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tbl_Report_tbl_Permission");
+            });
+
+            modelBuilder.Entity<TblReportDetail>(entity =>
+            {
+                entity.ToTable("tbl_ReportDetail");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.BlockName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ReportId).HasColumnName("ReportID");
+
+                entity.Property(e => e.TotalName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.Report)
+                    .WithMany(p => p.TblReportDetail)
+                    .HasForeignKey(d => d.ReportId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tbl_ReportDetail_tbl_Report");
+            });
+
+            modelBuilder.Entity<TblReportFile>(entity =>
+            {
+                entity.ToTable("tbl_ReportFile");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.ReportId).HasColumnName("ReportID");
+
+                entity.Property(e => e.Type)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.Report)
+                    .WithMany(p => p.TblReportFile)
+                    .HasForeignKey(d => d.ReportId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tbl_ReportFile_tbl_Report");
             });
         }
     }

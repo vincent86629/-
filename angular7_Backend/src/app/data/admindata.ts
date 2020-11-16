@@ -16,6 +16,7 @@ export class AdminData {
   phone: string = "";
   isEnable: boolean = null;
   groups: GroupCheckData[] = [];
+  permissions: SelectListItem[] = [];
   groupsName: string = "";
   constructor() {}
 }
@@ -24,6 +25,12 @@ export class GroupCheckData {
   id: number;
   codeName: string;
   isChecked: boolean;
+  constructor() { }
+}
+export class SelectListItem {
+  value: string;
+  text: string;
+  isSelected: boolean;
   constructor() { }
 }
 /*-----管理者帳號管理 end-----*/
