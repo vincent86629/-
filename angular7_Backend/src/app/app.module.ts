@@ -31,6 +31,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { VerifycodeComponent } from './shared/verifycode/verifycode.component';
 import { FinanceListComponent } from './views/finance/finance-list/finance-list.component';
 import { FinanceEditComponent } from './views/finance/finance-edit/finance-edit.component';
+import { AddPostDialogComponent } from './shared/add-post-dialog/add-post-dialog.component';
 
 @NgModule({
   imports: [
@@ -93,9 +94,11 @@ export class MaterialModule { }
     IndexComponent,
     VerifycodeComponent,
     FinanceListComponent,
-    FinanceEditComponent
+    FinanceEditComponent,
+    AddPostDialogComponent
   ],
   providers: [CookieService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents:[AddPostDialogComponent]
 })
 export class AppModule { }

@@ -12,23 +12,30 @@ export class FinanceReport {
 }
 export class FinanceEditData {
   id: number;
-  title: string;
   lastMonthBalance: number;
   thisMonthBalance: number;
   statusId: number
   bankSaving: any[] = [];
   blocks: Block[] = [];
+  permission: string;
+  yearMonth: string;
+  createBy: number;
   constructor() { }
 }
 export class Block {
   blockName: string;
   totalName: string;
   total: number;
-  rows: any[] = []
+  rows: Row[] = []
   constructor() {
     for (let i = 0; i < 15; i++) {
-      this.rows.push({});
+      this.rows.push(new Row());
     }
   }
 }
 
+export class Row {
+  date: string;
+  name: string;
+  value: number;
+}

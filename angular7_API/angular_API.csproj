@@ -25,6 +25,7 @@
     <Compile Include="Model\PageModel\Admin\AdminManage\AdminLogModel.cs" />
     <Compile Include="Model\PageModel\Admin\AdminManage\AdminMenuModel.cs" />
     <Compile Include="Model\PageModel\Admin\AdminManage\AdminModel.cs" />
+    <Compile Include="Model\PageModel\FinanceModel.cs" />
     <Compile Include="Model\PageModel\LoginModel.cs" />
     <Compile Include="Model\PageModel\Log\BrowseLogModel.cs" />
     <Compile Include="Model\PageModel\APIReturn.cs" />

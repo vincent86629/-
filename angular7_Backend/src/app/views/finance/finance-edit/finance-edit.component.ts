@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Block, FinanceEditData } from '../../../data/financedata';
+import { HttpService } from '../../../service/http-service/http.service';
+import { AppService } from '../../../service/app-service/app.service';
+import { MatDialog } from '@angular/material';
+import { AddPostDialogComponent } from '../../../shared/add-post-dialog/add-post-dialog.component';
+import { APIReturn } from '../../../data/apidata';
 
 @Component({
   selector: 'app-finance-edit',
@@ -11,61 +16,135 @@ export class FinanceEditComponent implements OnInit {
   editField: string;
   indexList: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   data: FinanceEditData;
-
   id: number;
+  tab = 0;
+  income = 0;
+  expenses = 0;
+  permissionOptions: any[] = [];
+  yearMonthOptions: any[] = [];
+  permissionName: string;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(
+    private route: ActivatedRoute,
+    private httpService: HttpService,
+    private appService: AppService,
+    public dialog: MatDialog
+  ) { }
   ngOnInit() {
     this.data = new FinanceEditData();
     this.id = +this.route.snapshot.paramMap.get('id');
     this.getData();
+    this.getPermissionOptions();
+    this.getYearMonthOptions();
   }
   getData() {
-    var test1 = new Block();
-    test1.blockName = 'Block1';
-    test1.totalName = 'Total1';
-    test1.total = 1111;
-    var test2 = new Block();
-    test2.blockName = 'Block2';
-    test2.totalName = 'Total2';
-    test2.total = 2222;
-    test1.rows = [
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-    ];
-    test2.rows = [
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-      { date: new Date('2020-11-16'), name: '住戶管理費收入', value: 100 },
-    ];
+    this.httpService.post<any>('api/Finance/GetFinanceEditData', this.id).subscribe(
+      (data: FinanceEditData) => {
+        this.data = data;
+        this.data.createBy = this.appService.loginResponse.adminInfo.id;
+      }
+      , (err: any) => {
+        console.log(err);
+      });
 
-    this.data.blocks.push(test1);
-    this.data.blocks.push(test2);
+  }
+  calculate() {
+    this.income = 0;
+    this.expenses = 0;
+    this.data.blocks.forEach((block, index) => {
+      block.total = block.rows.reduce(function (a, b) { return +a + +b.value }, 0)
+      if (index % 2 == 0) {
+        this.income += block.total;
+      } else {
+        this.expenses += block.total;
+      }
+    });
+    this.data.thisMonthBalance = this.data.lastMonthBalance + this.income - this.expenses;
+  }
+  permissionChange() {
+    this.permissionName = this.permissionOptions.find(a => a.value == this.data.permission).text;
+  }
+  getPermissionOptions() {
+    this.appService.loginResponse.adminInfo.permissions.forEach(a => {
+      if (a.value == '1') {
+      } else {
+        this.permissionOptions.push(a);
+      }
+    })
+  }
+  getYearMonthOptions() {
+    var start_year = 2020;
+    var start_month = 10;
+    var dateObj = new Date();
+    var month = dateObj.getUTCMonth() + 1; //months from 1-12
+    var year = dateObj.getUTCFullYear();
+    // this.search.yearMonth = year.toString() + '/' + String("0" + month).slice(-2);
+    for (let i = start_year; i <= year; i++) {
 
+      if (year == start_year) {
+        for (let m = start_month; m <= month; m++) {
+          let strYear = i.toString();
+          let strMonth = String("0" + m).slice(-2);
+          this.yearMonthOptions.push({ 'value': strYear + '/' + strMonth, 'text': strYear + '年' + strMonth + '月' })
+        }
+      }
+      else if (i == year) {
+        for (let m = 1; m <= month; m++) {
+          let strYear = i.toString();
+          let strMonth = String("0" + m).slice(-2);
+          this.yearMonthOptions.push({ 'value': strYear + '/' + strMonth, 'text': strYear + '年' + strMonth + '月' })
+        }
+      }
+      else if (i == start_year) {
+        for (let m = start_month; m <= 12; m++) {
+          let strYear = i.toString();
+          let strMonth = String("0" + m).slice(-2);
+          this.yearMonthOptions.push({ 'value': strYear + '/' + strMonth, 'text': strYear + '年' + strMonth + '月' })
+        }
+      }
+
+      if (year > i && i > start_year) {
+        for (let m = 1; m <= 12; m++) {
+          let strYear = i.toString();
+          let strMonth = String("0" + m).slice(-2);
+          this.yearMonthOptions.push({ 'value': strYear + '/' + strMonth, 'text': strYear + '年' + strMonth + '月' })
+        }
+      }
+
+    }
+  }
+  save(statusId: number) {
+    this.data.statusId = statusId;
+    let title = '暫存報表';
+    let message = '是否要暫時儲存當前報表?';
+    if (statusId === 1) {
+      title = '完成報表';
+      message = '完成後將不能修改,只能作廢重填,確認完成嗎?';
+    }
+    if (statusId === 2) {
+      title = '作廢報表';
+      message = '作廢後需重新填寫,確認作廢嗎?';
+    }
+
+    const dialogRef = this.dialog.open(AddPostDialogComponent, {
+      data: {
+        title: title,
+        messages:
+          [message
+          ],
+        bt_confirm: '確認',
+        bt_cancel: '取消'
+      }
+    });
+    console.log(this.data.blocks)
+    dialogRef.afterClosed().subscribe(result => {
+      this.httpService.post<any>('api/Finance/SaveFinanceEditData', this.data).subscribe(
+        (data: APIReturn) => {
+
+        }
+        , (err: any) => {
+          console.log(err);
+        });
+    });
   }
 }

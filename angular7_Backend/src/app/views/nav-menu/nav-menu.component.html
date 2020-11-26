@@ -1,14 +1,14 @@
 <div class="navbar-header col-sm-12">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-    <span class="sr-only">Toggle navigation</span>
-    <span class="icon-bar"></span>
-    <span class="icon-bar"></span>
-    <span class="icon-bar"></span>
-  </button>
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
     <a class="navbar-brand" href="index.html">揚庭保全</a>
     <button type="button" (click)="appService.Logout()" class="pull-right mat-button mat-stroked-button mat-primary Logout">
-    {{appService.loginResponse.adminInfo.name}} | 登出
-  </button>
+        {{appService.loginResponse.adminInfo.name}} | 登出
+    </button>
 </div>
 <!-- /.navbar-header -->
 
@@ -21,7 +21,7 @@
                 <ul class="nav nav-second-level">
                     <li [routerLinkActive]='["link-active"]' *ngFor="let level2 of level1.childs">
                         <a class="text-warning" [routerLink]='level2.url'> {{level2.name}}
-            </a>
+                        </a>
                     </li>
                 </ul>
                 <!-- /.nav-second-level -->
