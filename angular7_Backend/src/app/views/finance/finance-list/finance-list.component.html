@@ -18,7 +18,7 @@
             </div>
             <div class="col-sm-3">
                 <mat-form-field>
-                    <mat-select placeholder="社區" [(ngModel)]="search.permission">
+                    <mat-select placeholder="社區" [(ngModel)]="search.communityId">
                         <mat-option *ngFor="let option of permissionOptions" [value]="option.value">
                             {{option.text}}
                         </mat-option>
@@ -27,7 +27,7 @@
             </div>
             <div class="col-sm-3">
                 <mat-form-field>
-                    <mat-select placeholder="狀態" [(ngModel)]="search.status">
+                    <mat-select placeholder="狀態" [(ngModel)]="search.statusId">
                         <mat-option *ngFor="let option of statusOptions" [value]="option.value">
                             {{option.text}}
                         </mat-option>
@@ -47,7 +47,7 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <button class="col-sm-3" mat-button mat-raised-button color="primary" (click)='Search()'>查詢</button>
+                <button class="col-sm-3" mat-button mat-raised-button color="primary" (click)='getData()'>查詢</button>
             </div>
         </div>
         <div class="table-responsive">
@@ -87,7 +87,7 @@
                     <ng-container matColumnDef="operater">
                         <th mat-header-cell *matHeaderCellDef> 操作 </th>
                         <td mat-cell *matCellDef="let row">
-                            <i class="material-icons btn btn-outline btn-primary" (click)='Edit(row)' matTooltip="編輯">edit</i>
+                            <i class="material-icons btn btn-outline btn-primary" (click)='goEdit(row)' matTooltip="編輯">edit</i>
                         </td>
                     </ng-container>
 

@@ -1,14 +1,18 @@
 ﻿using angular_API.Model.EFModel;
 using angular_API.Model.PageModel;
 using angular_API.Model.PageModel.Admin.AdminManage;
+using angular_API.Model.PageModel.Enum;
 using angular_API.Service.Admin.AdminManage;
 using angular_API.Service.Admin.SystemManage;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using static angular_API.Model.PageModel.FinanceModel;
 
 namespace angular_API.Controllers
@@ -24,7 +28,46 @@ namespace angular_API.Controllers
         {
             _db = db;
         }
+        /// <summary>
+        /// 取得財報列表
+        /// </summary>
+        /// <returns></returns>
+        //[DisableCors]
+        [HttpPost]
+        [Route("GetFinanceListData")]
+        public FinanceListData GetFinanceListData(FinanceListDataQuery query)
+        {
+            var resp = new FinanceListData();
+            if (query.CommunityId != null)//社區代碼必填
+            {
+                var rows = _db.TblReport.Include(a => a.Permission)
+                                                .Include(a => a.TblReportDetail)
+                                                .Include(a => a.TblReportFile)
+                                                .Include(a => a.CreateByNavigation)
+                                                .Where(a => a.PermissionId == query.CommunityId)
+                                                .AsQueryable();
+                if (query.StatusId != null)
+                    rows = rows.Where(a => a.Status == query.StatusId);
+                if (!string.IsNullOrEmpty(query.CreateBy))
+                    rows = rows.Where(a => a.CreateByNavigation.Name.Contains(query.CreateBy));
+                if (!string.IsNullOrEmpty(query.YearMonth))
+                {
+                    var yearMonth = query.YearMonth.Replace("/", "");
+                    rows = rows.Where(a => a.YearMonth == yearMonth);
+                }
 
+                resp.Rows = rows.ToList().Select(a => new FinanceListData.Row
+                {
+                    Id = a.Id,
+                    Community = a.Permission.CodeName,
+                    CreateBy = a.CreateByNavigation.Name,
+                    Status = GetDescription((FinanceStatus)Enum.ToObject(typeof(FinanceStatus), a.Status)),
+                    UpdateTime = a.UpdateTime,
+                    YearMonth = a.YearMonth
+                }).ToList();
+            }
+            return resp;
+        }
         /// <summary>
         /// 取得財報編輯頁面
         /// </summary>
@@ -38,7 +81,29 @@ namespace angular_API.Controllers
             if (int.TryParse(id, out int intId))
                 if (intId != 0) //edit
                 {
-
+                    var data = _db.TblReport.Include(a => a.Permission)
+                                            .Include(a => a.TblReportDetail)
+                                            .Include(a => a.TblReportFile)
+                                            .Include(a => a.CreateByNavigation)
+                                            .FirstOrDefault(a => a.Id == intId);
+                    if (data != null)
+                    {
+                        resp.Id = data.Id;
+                        resp.LastMonthBalance = data.LastMonthBalance;
+                        resp.Permission = data.Permission.Id.ToString();
+                        resp.StatusId = data.Status;
+                        resp.ThisMonthBalance = data.ThisMonthBalance;
+                        resp.YearMonth = data.YearMonth.Insert(4, "/");
+                        resp.CreateBy = data.CreateBy;
+                        resp.BankSaving = JsonConvert.DeserializeObject<List<Row>>(data.BankSaving);
+                        resp.Blocks = data.TblReportDetail.Select(a => new Block
+                        {
+                            BlockName = a.BlockName,
+                            Total = a.Total ?? 0,
+                            TotalName = a.TotalName,
+                            Rows = JsonConvert.DeserializeObject<List<Row>>(a.Rows)
+                        }).ToList();
+                    }
                 }
                 else //create
                 {
@@ -72,44 +137,89 @@ namespace angular_API.Controllers
         {
             var resp = new APIReturn();
             var now = DateTime.Now;
-            //新增
-            if (data.Id == 0)
+            try
             {
-                var report = new TblReport
+                //新增
+                if (data.Id == 0)
                 {
-                    LastMonthBalance = data.LastMonthBalance,
-                    ThisMonthBalance = data.ThisMonthBalance,
-                    CreateTime = now,
-                    PermissionId = Convert.ToInt32(data.Permission),
-                    Status = data.StatusId,
-                    UpdateTime = now,
-                    YearMonth = data.YearMonth.Replace("/", ""),
-                    CreateBy = data.CreateBy,
-                    BankSaving = JsonConvert.SerializeObject(data.BankSaving)
-                };
-                _db.TblReport.Add(report);
-                _db.SaveChanges();
-                foreach (var block in data.Blocks)
-                {
-                    _db.TblReportDetail.Add(new TblReportDetail
+                    var report = new TblReport
                     {
-                        BlockName = block.BlockName,
-                        ReportId = report.Id,
-                        Rows = JsonConvert.SerializeObject(block.Rows),
-                        Total = block.Total,
-                        TotalName = block.TotalName
-                    });
+                        LastMonthBalance = data.LastMonthBalance,
+                        ThisMonthBalance = data.ThisMonthBalance,
+                        CreateTime = now,
+                        PermissionId = Convert.ToInt32(data.Permission),
+                        Status = data.StatusId,
+                        UpdateTime = now,
+                        YearMonth = data.YearMonth.Replace("/", ""),
+                        CreateBy = data.CreateBy,
+                        BankSaving = JsonConvert.SerializeObject(data.BankSaving)
+                    };
+                    _db.TblReport.Add(report);
+                    _db.SaveChanges();
+                    foreach (var block in data.Blocks)
+                    {
+                        _db.TblReportDetail.Add(new TblReportDetail
+                        {
+                            BlockName = block.BlockName,
+                            ReportId = report.Id,
+                            Rows = JsonConvert.SerializeObject(block.Rows),
+                            Total = block.Total,
+                            TotalName = block.TotalName
+                        });
+                    }
+                    _db.SaveChanges();
                 }
-                _db.SaveChanges();
+                //更新
+                else
+                {
+                    var report = _db.TblReport.Include(a => a.TblReportDetail)
+                                              .FirstOrDefault(a => a.Id == data.Id);
+                    if (report != null)
+                    {
+                        report.Id = data.Id;
+                        report.LastMonthBalance = data.LastMonthBalance;
+                        report.PermissionId = Convert.ToInt32(data.Permission);
+                        report.Status = data.StatusId;
+                        report.ThisMonthBalance = data.ThisMonthBalance;
+                        report.YearMonth = data.YearMonth.Replace("/", "");
+                        report.CreateBy = data.CreateBy;
+                        report.BankSaving = JsonConvert.SerializeObject(data.BankSaving);
+                        report.UpdateTime = now;
+                        _db.TblReportDetail.RemoveRange(report.TblReportDetail);
+                        foreach (var block in data.Blocks)
+                        {
+                            _db.TblReportDetail.Add(new TblReportDetail
+                            {
+                                BlockName = block.BlockName,
+                                ReportId = report.Id,
+                                Rows = JsonConvert.SerializeObject(block.Rows),
+                                Total = block.Total,
+                                TotalName = block.TotalName
+                            });
+                        }
+                        _db.SaveChanges();
+                        resp.Code = APIReturnCode.Success;
+                    }
+                    else
+                    {
+                        resp.Code = APIReturnCode.Fail;
+                        resp.Message = "查無此資料";
+                    }
+                }
             }
-            //更新
-            else
+            catch (Exception ex)
             {
-
+                resp.Code = APIReturnCode.Exception;
+                resp.Message = ex.Message;
             }
             return resp;
         }
-
+        public string GetDescription(Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+            DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            return attributes.Length > 0 ? attributes[0].Description : value.ToString();
+        }
     }
 
 }

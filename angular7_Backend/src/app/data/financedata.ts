@@ -39,3 +39,9 @@ export class Row {
   name: string;
   value: number;
 }
+export class SearchQuery {
+  createBy: string;
+  statusId: string;
+  communityId: string;
+  yearMonth: string;
+}

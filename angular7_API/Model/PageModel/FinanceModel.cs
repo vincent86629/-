@@ -5,33 +5,29 @@ using System.Collections.Generic;
 
 namespace angular_API.Model.PageModel
 {
-    //    export class FinanceEditData
-    //    {
-    //        id: number;
-    //  title: string;
-    //  lastMonthBalance: number;
-    //  thisMonthBalance: number;
-    //  statusId: number
-    //  bankSaving: any[] = [];
-    //  blocks: Block[] = [];
-    //  constructor() { }
-    //    }
-    //    export class Block
-    //    {
-    //        blockName: string;
-    //  totalName: string;
-    //  total: number;
-    //  rows: any[] = []
-    //        constructor()
-    //        {
-    //            for (let i = 0; i < 15; i++)
-    //            {
-    //                this.rows.push({ });
-    //        }
-    //    }
-    //}
+
     public class FinanceModel
     {
+        public class FinanceListData
+        {
+            public List<Row> Rows { get; set; } = new List<Row>();
+            public class Row
+            {
+                public int Id { get; set; }
+                public string YearMonth { get; set; }
+                public string Community { get; set; }
+                public string CreateBy { get; set; }
+                public DateTime UpdateTime { get; set; }
+                public string Status { get; set; }
+            }
+        }
+        public class FinanceListDataQuery
+        {
+            public int? CommunityId { get; set; }
+            public string YearMonth { get; set; }
+            public int? StatusId { get; set; }
+            public string CreateBy { get; set; }
+        }
         public class FinanceEditData
         {
             public int Id { get; set; }
@@ -47,7 +43,7 @@ namespace angular_API.Model.PageModel
             {
                 BankSaving = new List<Row>();
                 Blocks = new List<Block>();
-               
+
             }
 
         }

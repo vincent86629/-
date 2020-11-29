@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpService } from '../../../service/http-service/http.service';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
-import { FinanceReport } from '../../../data/financedata';
+import { FinanceReport, SearchQuery } from '../../../data/financedata';
 import { AppService } from '../../../service/app-service/app.service';
 import { Router } from '@angular/router';
 
@@ -37,15 +37,21 @@ export class FinanceListComponent implements OnInit {
     this.adminId = this.appService.loginResponse.adminInfo.id;
     this.getPermissionOptions();
     this.getYearMonthOptions();
+    this.getData();
   }
   getPermissionOptions() {
-    this.appService.loginResponse.adminInfo.permissions.forEach(a => {
-      if (a.value == '1') {
-        this.permissionOptions.push({ 'value': '0', 'text': '全部' });
-      } else {
-        this.permissionOptions.push(a);
-      }
-    })
+    let permissions = this.appService.loginResponse.adminInfo.permissions;
+    if (permissions.length > 0) {
+      this.search.communityId = permissions[0].value;
+      permissions.forEach(a => {
+        if (a.value == '1') {
+          this.permissionOptions.push({ 'value': '0', 'text': '全部' });
+        } else {
+          this.permissionOptions.push(a);
+        }
+      })
+    }
+
   }
   getYearMonthOptions() {
     var start_year = 2020;
@@ -89,15 +95,24 @@ export class FinanceListComponent implements OnInit {
     }
   }
   getData() {
-
+    this.httpService.post<any>('api/Finance/GetFinanceListData', this.search).subscribe(
+      (resp: any) => {
+        this.dataSource.data = resp.rows;
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      }
+      , (err: any) => {
+        console.log(err);
+      });
   }
   createReport() {
     this.router.navigate(['finance-edit/0']);
   }
-}
-class SearchQuery {
-  createBy: string;
-  status: string;
-  permission: string;
-  yearMonth: string;
+  goEdit(row: FinanceReport) {
+    // this.router.navigate(['finance-edit/' + row.id], {
+    //   queryParams: this.search,
+    //   skipLocationChange: true,//路由參數隱藏
+    // });
+    this.router.navigate(['finance-edit/' + row.id]);
+  }
 }

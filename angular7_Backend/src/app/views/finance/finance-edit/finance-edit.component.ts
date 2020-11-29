@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Block, FinanceEditData } from '../../../data/financedata';
+import { Block, FinanceEditData, SearchQuery } from '../../../data/financedata';
 import { HttpService } from '../../../service/http-service/http.service';
 import { AppService } from '../../../service/app-service/app.service';
 import { MatDialog } from '@angular/material';
 import { AddPostDialogComponent } from '../../../shared/add-post-dialog/add-post-dialog.component';
 import { APIReturn } from '../../../data/apidata';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-finance-edit',
@@ -23,12 +24,12 @@ export class FinanceEditComponent implements OnInit {
   permissionOptions: any[] = [];
   yearMonthOptions: any[] = [];
   permissionName: string;
-
   constructor(
     private route: ActivatedRoute,
     private httpService: HttpService,
     private appService: AppService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private location: Location
   ) { }
   ngOnInit() {
     this.data = new FinanceEditData();
@@ -42,6 +43,8 @@ export class FinanceEditComponent implements OnInit {
       (data: FinanceEditData) => {
         this.data = data;
         this.data.createBy = this.appService.loginResponse.adminInfo.id;
+        this.permissionChange();
+        this.calculate();
       }
       , (err: any) => {
         console.log(err);
@@ -140,11 +143,18 @@ export class FinanceEditComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.httpService.post<any>('api/Finance/SaveFinanceEditData', this.data).subscribe(
         (data: APIReturn) => {
-
+          if (data.code == 0) {
+            alert('儲存成功!');
+          } else {
+            alert('儲存失敗!錯誤訊息:' + data.message);
+          }
         }
         , (err: any) => {
           console.log(err);
         });
     });
+  }
+  goBack(){
+    this.location.back();
   }
 }

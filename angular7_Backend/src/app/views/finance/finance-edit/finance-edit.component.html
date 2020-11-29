@@ -8,7 +8,7 @@
     <div class="panel-body">
         <div class="row">
             <div class="col-sm-12">
-                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0}" (click)='calculate()'>計算</button>
+                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0}" (click)='goBack()'>回列表頁</button>
                 <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0}" (click)='save(0)'>暫存</button>
                 <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0}" (click)='save(1)'>完成</button>
                 <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0||data.id==0}" (click)='save(2)'>作廢</button>
