@@ -15,7 +15,7 @@ export class FinanceEditData {
   lastMonthBalance: number;
   thisMonthBalance: number;
   statusId: number
-  bankSaving: any[] = [];
+  bankSaving: Row[] = [];
   blocks: Block[] = [];
   permission: string;
   yearMonth: string;

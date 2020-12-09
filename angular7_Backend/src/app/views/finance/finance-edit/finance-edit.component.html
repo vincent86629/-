@@ -147,6 +147,18 @@
                             <td colspan="12">本月份活存結餘</td>
                             <td colspan="1">{{data.thisMonthBalance}}</td>
                         </tr>
+                        <tr *ngFor="let row of data.bankSaving;">
+                            <td colspan="12">
+                                <input placeholder="銀行定期存款" type="text" style="text-align: center;" [(ngModel)]="row.name">
+                            </td>
+                            <td colspan="1">
+                                <input type="number" (change)="calculate()" [(ngModel)]="row.value">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="12">社區總餘額</td>
+                            <td colspan="1">{{total}}</td>
+                        </tr>
                     </table>
                 </div>
             </div>

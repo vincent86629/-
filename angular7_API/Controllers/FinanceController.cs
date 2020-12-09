@@ -122,6 +122,12 @@ namespace angular_API.Controllers
                     {
                         block.Rows.AddRange(emptyRows);
                     }
+
+                    resp.BankSaving.Add(new Row());
+                    resp.BankSaving.Add(new Row());
+                    resp.BankSaving.Add(new Row());
+                    resp.BankSaving.Add(new Row());
+                    resp.BankSaving.Add(new Row());
                 }
 
             return resp;

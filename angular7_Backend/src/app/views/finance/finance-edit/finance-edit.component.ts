@@ -21,6 +21,7 @@ export class FinanceEditComponent implements OnInit {
   tab = 0;
   income = 0;
   expenses = 0;
+  total = 0;
   permissionOptions: any[] = [];
   yearMonthOptions: any[] = [];
   permissionName: string;
@@ -43,6 +44,8 @@ export class FinanceEditComponent implements OnInit {
       (data: FinanceEditData) => {
         this.data = data;
         this.data.createBy = this.appService.loginResponse.adminInfo.id;
+        this.data.permission = this.permissionOptions[0].value;
+        this.data.yearMonth = this.yearMonthOptions[this.yearMonthOptions.length - 1].value;
         this.permissionChange();
         this.calculate();
       }
@@ -63,6 +66,8 @@ export class FinanceEditComponent implements OnInit {
       }
     });
     this.data.thisMonthBalance = this.data.lastMonthBalance + this.income - this.expenses;
+    this.total = this.data.thisMonthBalance + this.data.bankSaving.reduce(function (a, b) { return +a + +b.value }, 0);
+    console.log(this.total);
   }
   permissionChange() {
     this.permissionName = this.permissionOptions.find(a => a.value == this.data.permission).text;
@@ -154,7 +159,7 @@ export class FinanceEditComponent implements OnInit {
         });
     });
   }
-  goBack(){
+  goBack() {
     this.location.back();
   }
 }
