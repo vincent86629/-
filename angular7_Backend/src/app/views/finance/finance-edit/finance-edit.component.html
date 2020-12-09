@@ -9,10 +9,10 @@
         <div class="row">
             <div class="col-sm-12">
                 <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0}" (click)='goBack()'>回列表頁</button>
-                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0}" (click)='save(0)'>暫存</button>
-                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0}" (click)='save(1)'>完成</button>
-                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0||data.id==0}" (click)='save(2)'>作廢</button>
-                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0}" (click)='calculate()'>匯出</button>
+                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0||data.statusId==2||data.statusId==1||!isCreator}" (click)='save(0)'>暫存</button>
+                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0||data.statusId==2||data.statusId==1||!isCreator}" (click)='save(1)'>完成</button>
+                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0||data.id==0||!isCreator}" (click)='save(2)'>作廢</button>
+                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0}" (click)='exportexcel()'>匯出</button>
                 <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0}" (click)='tab=1'>上傳</button>
                 <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 1}" (click)='tab=0'>返回</button>
             </div>
@@ -40,11 +40,12 @@
                     </mat-form-field>
                 </div>
             </div>
-            <h3 class="card-header text-center font-weight-bold text-uppercase py-4">
-                {{permissionName}}{{data.yearMonth}}收支表</h3>
             <div class="card-body">
                 <div id="table" class="table-editable">
-                    <table class="table table-bordered table-responsive-md table-striped text-center">
+                    <table class="table table-bordered table-responsive-md table-striped text-center" [ngClass]="{'hidden':data.statusId==1||!isCreator}">
+                        <tr>
+                            <th colspan="13" class="text-center" style="font-size: 24px;">{{permissionName}}{{data.yearMonth}}收支表</th>
+                        </tr>
                         <tr>
                             <th colspan="2" class="text-center">日期</th>
                             <th colspan="3" class="text-center">項目</th>
@@ -153,6 +154,118 @@
                             </td>
                             <td colspan="1">
                                 <input type="number" (change)="calculate()" [(ngModel)]="row.value">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="12">社區總餘額</td>
+                            <td colspan="1">{{total}}</td>
+                        </tr>
+                    </table>
+                    <!-- Excel匯出用 -->
+                    <table id="excel-table" class="table table-bordered table-responsive-md table-striped text-center" [ngClass]="{'hidden':data.statusId!=1&&isCreator}">
+                        <tr>
+                            <th colspan="13" class="text-center" style="font-size: 24px;">{{permissionName}}{{data.yearMonth}}收支表</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="text-center">日期</th>
+                            <th colspan="3" class="text-center">項目</th>
+                            <th colspan="1" class="text-center">收入</th>
+
+                            <th colspan="2" class="text-center">日期</th>
+                            <th colspan="3" class="text-center">項目</th>
+                            <th colspan="1" class="text-center">支出</th>
+
+                            <th colspan="1" class="text-center">活存餘額</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="text-center"></td>
+                            <td colspan="10" class="text-center">上月存款簿活存餘額</td>
+                            <td colspan="1" class="text-center">
+                                {{data.lastMonthBalance}}
+                            </td>
+                        </tr>
+                        <ng-container *ngFor="let block of data.blocks;let i=index;let even = even">
+                            <ng-container *ngIf="even">
+                                <tr>
+                                    <td colspan="2">
+                                    </td>
+                                    <td colspan="3">
+                                        {{data.blocks[i].blockName}}
+                                    </td>
+                                    <td colspan="1">
+                                    </td>
+                                    <td colspan="2">
+                                    </td>
+                                    <td colspan="3">
+                                        {{data.blocks[i+1].blockName}}
+                                    </td>
+                                    <td colspan="1">
+                                    </td>
+                                    <td colspan="1"></td>
+                                </tr>
+                                <tr *ngFor="let index of indexList;">
+                                    <td colspan="2">
+                                        {{data.blocks[i].rows[index].date | date:'yyyy/MM/dd'}}
+                                    </td>
+                                    <td colspan="3">
+                                        {{data.blocks[i].rows[index].name}}
+                                    </td>
+                                    <td colspan="1">
+                                        {{data.blocks[i].rows[index].value}}
+                                    </td>
+                                    <td colspan="2">
+                                        {{data.blocks[i+1].rows[index].date | date:'yyyy/MM/dd'}}
+                                    </td>
+                                    <td colspan="3">
+                                        {{data.blocks[i+1].rows[index].name}}
+                                    </td>
+                                    <td colspan="1">
+                                        {{data.blocks[i+1].rows[index].value}}
+                                    </td>
+                                    <td colspan="1"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        {{data.blocks[i].totalName}}
+                                    </td>
+                                    <td colspan="1">
+                                        {{data.blocks[i].total}}
+                                    </td>
+                                    <td colspan="5">
+                                        {{data.blocks[i+1].totalName}}
+                                    </td>
+                                    <td colspan="1">
+                                        {{data.blocks[i+1].total}}
+                                    </td>
+                                    <td colspan="1"></td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                        <tr>
+                            <td colspan="5">
+                                收入合計
+                            </td>
+                            <td colspan="1">
+                                {{income}}
+                            </td>
+                            <td colspan="5">
+                                銀行支出合計
+                            </td>
+                            <td colspan="1">
+                                {{expenses}}
+                            </td>
+                            <td colspan="1"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="12">本月份活存結餘</td>
+                            <td colspan="1">{{data.thisMonthBalance}}</td>
+                        </tr>
+                        <tr *ngFor="let row of data.bankSaving;">
+                            <td colspan="12">
+                                {{row.name}}
+                            </td>
+                            <td colspan="1">
+                                {{row.value}}
                             </td>
                         </tr>
                         <tr>

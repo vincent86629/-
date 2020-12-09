@@ -51,7 +51,7 @@ export class FinanceListComponent implements OnInit {
         }
       })
     }
-
+    this.search.communityId = this.permissionOptions[0].value;
   }
   getYearMonthOptions() {
     var start_year = 2020;
@@ -59,7 +59,6 @@ export class FinanceListComponent implements OnInit {
     var dateObj = new Date();
     var month = dateObj.getUTCMonth() + 1; //months from 1-12
     var year = dateObj.getUTCFullYear();
-    // this.search.yearMonth = year.toString() + '/' + String("0" + month).slice(-2);
     for (let i = start_year; i <= year; i++) {
 
       if (year == start_year) {
@@ -93,6 +92,7 @@ export class FinanceListComponent implements OnInit {
       }
 
     }
+    // this.search.yearMonth = this.yearMonthOptions[this.yearMonthOptions.length - 1].value;
   }
   getData() {
     this.httpService.post<any>('api/Finance/GetFinanceListData', this.search).subscribe(

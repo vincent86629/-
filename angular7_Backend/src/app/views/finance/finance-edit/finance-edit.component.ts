@@ -7,6 +7,8 @@ import { MatDialog } from '@angular/material';
 import { AddPostDialogComponent } from '../../../shared/add-post-dialog/add-post-dialog.component';
 import { APIReturn } from '../../../data/apidata';
 import { Location } from '@angular/common';
+import * as XLSX from 'xlsx';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-finance-edit',
@@ -25,27 +27,39 @@ export class FinanceEditComponent implements OnInit {
   permissionOptions: any[] = [];
   yearMonthOptions: any[] = [];
   permissionName: string;
+  isCreator = false;
   constructor(
     private route: ActivatedRoute,
     private httpService: HttpService,
     private appService: AppService,
     public dialog: MatDialog,
-    private location: Location
+    private location: Location,
+    private router: Router,
+
   ) { }
   ngOnInit() {
     this.data = new FinanceEditData();
     this.id = +this.route.snapshot.paramMap.get('id');
-    this.getData();
     this.getPermissionOptions();
     this.getYearMonthOptions();
+    this.getData();
   }
   getData() {
     this.httpService.post<any>('api/Finance/GetFinanceEditData', this.id).subscribe(
       (data: FinanceEditData) => {
         this.data = data;
-        this.data.createBy = this.appService.loginResponse.adminInfo.id;
-        this.data.permission = this.permissionOptions[0].value;
-        this.data.yearMonth = this.yearMonthOptions[this.yearMonthOptions.length - 1].value;
+        if (this.data.createBy != 0) {
+          this.isCreator = this.data.createBy == this.appService.loginResponse.adminInfo.id;
+        } else {
+          this.data.createBy = this.appService.loginResponse.adminInfo.id;
+          this.isCreator = true;
+        }
+        if (this.data.yearMonth == null) {
+          this.data.yearMonth = this.yearMonthOptions[this.yearMonthOptions.length - 1].value;
+        }
+        if (this.data.permission == null) {
+          this.data.permission = this.permissionOptions[0].value;
+        }
         this.permissionChange();
         this.calculate();
       }
@@ -86,7 +100,6 @@ export class FinanceEditComponent implements OnInit {
     var dateObj = new Date();
     var month = dateObj.getUTCMonth() + 1; //months from 1-12
     var year = dateObj.getUTCFullYear();
-    // this.search.yearMonth = year.toString() + '/' + String("0" + month).slice(-2);
     for (let i = start_year; i <= year; i++) {
 
       if (year == start_year) {
@@ -122,7 +135,6 @@ export class FinanceEditComponent implements OnInit {
     }
   }
   save(statusId: number) {
-    this.data.statusId = statusId;
     let title = '暫存報表';
     let message = '是否要暫時儲存當前報表?';
     if (statusId === 1) {
@@ -144,22 +156,40 @@ export class FinanceEditComponent implements OnInit {
         bt_cancel: '取消'
       }
     });
-    console.log(this.data.blocks)
     dialogRef.afterClosed().subscribe(result => {
-      this.httpService.post<any>('api/Finance/SaveFinanceEditData', this.data).subscribe(
-        (data: APIReturn) => {
-          if (data.code == 0) {
-            alert('儲存成功!');
-          } else {
-            alert('儲存失敗!錯誤訊息:' + data.message);
+      if (result) {
+        this.data.statusId = statusId;
+        this.httpService.post<any>('api/Finance/SaveFinanceEditData', this.data).subscribe(
+          (data: APIReturn) => {
+            if (data.code == 0) {
+              alert('儲存成功!');
+              this.router.navigate(['finance-edit/' + data.message]);
+
+            } else {
+              alert('儲存失敗!錯誤訊息:' + data.message);
+            }
           }
-        }
-        , (err: any) => {
-          console.log(err);
-        });
+          , (err: any) => {
+            console.log(err);
+          });
+      }
     });
   }
   goBack() {
     this.location.back();
   }
+  exportexcel(): void {
+    /* table id is passed over here */
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.permissionName + this.data.yearMonth + '收支表.xlsx');
+
+  }
+
 }

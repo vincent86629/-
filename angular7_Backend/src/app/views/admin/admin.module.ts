@@ -75,10 +75,9 @@ export class MaterialModule { }
     AdminPermissionComponent,
     AdminDetailComponent,
     AdminPermissionDetailComponent,
-    LogRecordComponent,
-    AddPostDialogComponent 
+    LogRecordComponent
   ],
-  entryComponents: [AdminPermissionDetailComponent, LogRecordComponent,AddPostDialogComponent
+  entryComponents: [AdminPermissionDetailComponent, LogRecordComponent
    ],
 })
 export class AdminModule { }

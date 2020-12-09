@@ -44,7 +44,7 @@ namespace angular_API.Controllers
                                                 .Include(a => a.TblReportDetail)
                                                 .Include(a => a.TblReportFile)
                                                 .Include(a => a.CreateByNavigation)
-                                                .Where(a => a.PermissionId == query.CommunityId)
+                                                .Where(a => query.CommunityId == 0 ? true : a.PermissionId == query.CommunityId)
                                                 .AsQueryable();
                 if (query.StatusId != null)
                     rows = rows.Where(a => a.Status == query.StatusId);
@@ -174,6 +174,8 @@ namespace angular_API.Controllers
                         });
                     }
                     _db.SaveChanges();
+                    resp.Code = APIReturnCode.Success;
+                    resp.Message = report.Id.ToString();
                 }
                 //更新
                 else
@@ -205,6 +207,7 @@ namespace angular_API.Controllers
                         }
                         _db.SaveChanges();
                         resp.Code = APIReturnCode.Success;
+                        resp.Message = report.Id.ToString();
                     }
                     else
                     {
