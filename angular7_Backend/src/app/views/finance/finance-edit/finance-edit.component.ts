@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Block, FinanceEditData, SearchQuery } from '../../../data/financedata';
+import { Block, FinanceEditData, FinanceFile, SearchQuery } from '../../../data/financedata';
 import { HttpService } from '../../../service/http-service/http.service';
 import { AppService } from '../../../service/app-service/app.service';
 import { MatDialog } from '@angular/material';
@@ -28,6 +28,7 @@ export class FinanceEditComponent implements OnInit {
   yearMonthOptions: any[] = [];
   permissionName: string;
   isCreator = false;
+  fileData: File = null;
   constructor(
     private route: ActivatedRoute,
     private httpService: HttpService,
@@ -48,6 +49,9 @@ export class FinanceEditComponent implements OnInit {
     this.httpService.post<any>('api/Finance/GetFinanceEditData', this.id).subscribe(
       (data: FinanceEditData) => {
         this.data = data;
+        this.data.files = [];
+
+        console.log(this.data.files);
         if (this.data.createBy != 0) {
           this.isCreator = this.data.createBy == this.appService.loginResponse.adminInfo.id;
         } else {
@@ -73,13 +77,10 @@ export class FinanceEditComponent implements OnInit {
     this.expenses = 0;
     this.data.blocks.forEach((block, index) => {
       block.total = block.rows.reduce(function (a, b) { return +a + +b.value }, 0)
-      if (index % 2 == 0) {
-        this.income += block.total;
-      } else {
-        this.expenses += block.total;
-      }
     });
-    this.data.thisMonthBalance = this.data.lastMonthBalance + this.income - this.expenses;
+    this.income = this.data.blocks[0].total + this.data.blocks[2].total;
+    this.expenses = this.data.blocks[3].total;
+    this.data.thisMonthBalance = this.data.lastMonthBalance + this.income - this.expenses + this.data.blocks[4].total - this.data.blocks[5].total;
     this.total = this.data.thisMonthBalance + this.data.bankSaving.reduce(function (a, b) { return +a + +b.value }, 0);
     console.log(this.total);
   }
@@ -191,5 +192,30 @@ export class FinanceEditComponent implements OnInit {
     XLSX.writeFile(wb, this.permissionName + this.data.yearMonth + '收支表.xlsx');
 
   }
+  upLoadPicture(event) {
+    const selectedFile: any = event.target.files[0];
 
+    if (selectedFile != null) {
+      const type = selectedFile.type.split('/')[1];
+      const typeList = ['jpg', 'jpeg', 'png'];
+
+      if (typeList.indexOf(type) === -1) {
+        alert('檔案格式只接受 : jpg, jpeg, png');
+        return;
+      }
+      const uploadData = new FormData();
+      uploadData.append('uploads', selectedFile, selectedFile.name);
+      console.log(uploadData);
+      this.httpService.upload<any>('api/Finance/PictureUpload', uploadData).subscribe(
+        (apiReturn: APIReturn) => {
+          this.data.files.push({ path: apiReturn.message, id: this.data.files.length + 1 })
+        },
+        (error: any) => {
+          console.log(error);
+        });
+    }
+  }
+  removeFile(id: number) {
+    this.data.files = this.data.files.filter(a => a.id != id);
+  }
 }

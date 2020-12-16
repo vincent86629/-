@@ -20,6 +20,7 @@ export class FinanceEditData {
   permission: string;
   yearMonth: string;
   createBy: number;
+  files: FinanceFile[] = [];
   constructor() { }
 }
 export class Block {
@@ -33,7 +34,6 @@ export class Block {
     }
   }
 }
-
 export class Row {
   date: string;
   name: string;
@@ -44,4 +44,8 @@ export class SearchQuery {
   statusId: string;
   communityId: string;
   yearMonth: string;
+}
+export class FinanceFile {
+  id: number;
+  path: string;
 }

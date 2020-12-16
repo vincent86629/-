@@ -5,3 +5,13 @@ table {
 td input {
     width: 100%;
 }
+
+.btn-remove {
+    position: relative;
+    float: right;
+    top: 10px;
+}
+
+.image {
+    width: 100%;
+}

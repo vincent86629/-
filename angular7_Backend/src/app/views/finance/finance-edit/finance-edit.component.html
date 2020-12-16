@@ -8,10 +8,10 @@
     <div class="panel-body">
         <div class="row">
             <div class="col-sm-12">
-                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0}" (click)='goBack()'>回列表頁</button>
-                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0||data.statusId==2||data.statusId==1||!isCreator}" (click)='save(0)'>暫存</button>
-                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0||data.statusId==2||data.statusId==1||!isCreator}" (click)='save(1)'>完成</button>
-                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0||data.id==0||!isCreator}" (click)='save(2)'>作廢</button>
+                <button mat-button mat-raised-button color="primary" (click)='goBack()'>回列表頁</button>
+                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': data.statusId==2||data.statusId==1||!isCreator}" (click)='save(0)'>暫存</button>
+                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': data.statusId==2||data.statusId==1||!isCreator}" (click)='save(1)'>完成</button>
+                <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0||data.id==0||!isCreator||data.statusId==0||data.statusId==2}" (click)='save(2)'>作廢</button>
                 <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0}" (click)='exportexcel()'>匯出</button>
                 <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 0}" (click)='tab=1'>上傳</button>
                 <button mat-button mat-raised-button color="primary" [ngClass]="{'hidden': tab !== 1}" (click)='tab=0'>返回</button>
@@ -44,7 +44,8 @@
                 <div id="table" class="table-editable">
                     <table class="table table-bordered table-responsive-md table-striped text-center" [ngClass]="{'hidden':data.statusId==1||!isCreator}">
                         <tr>
-                            <th colspan="13" class="text-center" style="font-size: 24px;">{{permissionName}}{{data.yearMonth}}收支表</th>
+                            <th colspan="13" class="text-center" style="font-size: 24px;">
+                                {{permissionName}}{{data.yearMonth}}收支表</th>
                         </tr>
                         <tr>
                             <th colspan="2" class="text-center">日期</th>
@@ -125,7 +126,9 @@
                                     <td colspan="1">
                                         {{data.blocks[i+1].total}}
                                     </td>
-                                    <td colspan="1"></td>
+                                    <td colspan="1" *ngIf="i==4">{{data.blocks[i].total-data.blocks[i+1].total}}</td>
+                                    <td colspan="1" *ngIf="i!=4"></td>
+
                                 </tr>
                             </ng-container>
                         </ng-container>
@@ -161,10 +164,11 @@
                             <td colspan="1">{{total}}</td>
                         </tr>
                     </table>
-                    <!-- Excel匯出用 -->
+                    <!-- Excel匯出完成用 -->
                     <table id="excel-table" class="table table-bordered table-responsive-md table-striped text-center" [ngClass]="{'hidden':data.statusId!=1&&isCreator}">
                         <tr>
-                            <th colspan="13" class="text-center" style="font-size: 24px;">{{permissionName}}{{data.yearMonth}}收支表</th>
+                            <th colspan="13" class="text-center" style="font-size: 24px;">
+                                {{permissionName}}{{data.yearMonth}}收支表</th>
                         </tr>
                         <tr>
                             <th colspan="2" class="text-center">日期</th>
@@ -237,7 +241,8 @@
                                     <td colspan="1">
                                         {{data.blocks[i+1].total}}
                                     </td>
-                                    <td colspan="1"></td>
+                                    <td colspan="1" *ngIf="i==4">{{data.blocks[i].total-data.blocks[i+1].total}}</td>
+                                    <td colspan="1" *ngIf="i!=4"></td>
                                 </tr>
                             </ng-container>
                         </ng-container>
@@ -276,7 +281,23 @@
                 </div>
             </div>
         </div>
-        <!-- Editable table -->
+        <!-- Image -->
+        <div class="container" [ngClass]="{'hidden': tab !== 1}">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <h3>Choose File</h3>
+                    <div class="form-group">
+                        <input type="file" (change)="upLoadPicture($event)" name="image" />
+                    </div>
+                </div>
+                <div class="col-md-6 offset-md-3">
+                    <div *ngFor="let image of data.files">
+                        <button class="btn-remove" (click)="removeFile(image.id)">X</button>
+                        <img class="image" [src]="image.path" />
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>

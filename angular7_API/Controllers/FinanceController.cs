@@ -5,14 +5,18 @@ using angular_API.Model.PageModel.Enum;
 using angular_API.Service.Admin.AdminManage;
 using angular_API.Service.Admin.SystemManage;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using static angular_API.Model.PageModel.FinanceModel;
 
 namespace angular_API.Controllers
@@ -23,10 +27,12 @@ namespace angular_API.Controllers
     public class FinanceController : ControllerBase
     {
         private dbAngular_API_Context _db;
+        private IConfiguration _configuration;
 
-        public FinanceController(dbAngular_API_Context db)
+        public FinanceController(dbAngular_API_Context db, IConfiguration configuration)
         {
             _db = db;
+            _configuration = configuration;
         }
         /// <summary>
         /// 取得財報列表
@@ -222,6 +228,72 @@ namespace angular_API.Controllers
                 resp.Message = ex.Message;
             }
             return resp;
+        }
+
+        /// <summary>
+        /// 上傳圖片
+        /// </summary>
+        /// <returns></returns>
+        //[DisableCors]
+        [HttpPost]
+        [Route("PictureUpload")]
+        public async Task<IActionResult> PictureUpload([FromForm] List<IFormFile> uploads)
+        {
+            APIReturn result = new APIReturn();
+            var TypeName = "FinanceFiles";
+            var PicUrl = "";
+
+            try
+            {
+                if (uploads.Count > 0)
+                {
+                    var formFile = uploads[0];
+
+                    if (formFile.Length > 0)
+                    {
+                        var FileName = DateTime.Now.ToString("yyyyMMddHHmmssfff");
+                        var subFileName = formFile.FileName.Split('.').LastOrDefault();
+                        string serverPath = _configuration["ServerPath"];
+                        var refPath = $"{FileName}.{subFileName}";
+
+                        bool exists = System.IO.Directory.Exists(serverPath + TypeName);
+                        if (!exists)
+                        {
+                            System.IO.Directory.CreateDirectory(serverPath + TypeName);
+                        }
+
+                        // 要存放的位置
+                        var savePath = serverPath + TypeName + "/" + refPath;
+                        using (var stream = new FileStream(savePath, FileMode.Create))
+                        {
+                            await formFile.CopyToAsync(stream);
+                            PicUrl = refPath;
+                        }
+                    }
+
+                    return Ok(new APIReturn()
+                    {
+                        Code = APIReturnCode.Success,
+                        Message = _configuration["UploadDomain"] + PicUrl
+                    }); ;
+                }
+                else
+                {
+                    return Ok(new APIReturn()
+                    {
+                        Code = APIReturnCode.Fail,
+                        Message = "尚未選擇檔案"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(new APIReturn()
+                {
+                    Code = APIReturnCode.Exception,
+                    Message = "Error:" + ex.Message + "/Trace:" + ex.StackTrace
+                });
+            }
         }
         public string GetDescription(Enum value)
         {
