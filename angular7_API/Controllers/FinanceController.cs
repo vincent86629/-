@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using ShindaLibrary;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -112,7 +113,7 @@ namespace angular_API.Controllers
                         resp.Files = data.TblReportFile.Select((a, i) => new FinanceFile
                         {
                             Id = i + 1,
-                            Path = _configuration["UploadDomain"] + "FinanceFiles/" + a.Path
+                            Path = a.Path
                         }).ToList();
                     }
                 }
@@ -153,7 +154,7 @@ namespace angular_API.Controllers
         public APIReturn SaveFinanceEditData(FinanceEditData data)
         {
             var resp = new APIReturn();
-            var now = DateTime.Now;
+            var now = DateTimeTools.Now();
             try
             {
                 //新增
@@ -279,7 +280,7 @@ namespace angular_API.Controllers
 
                     if (formFile.Length > 0)
                     {
-                        var FileName = DateTime.Now.ToString("yyyyMMddHHmmssfff");
+                        var FileName = DateTimeTools.Now().ToString("yyyyMMddHHmmssfff");
                         var subFileName = formFile.FileName.Split('.').LastOrDefault();
                         string serverPath = _configuration["ServerPath"];
                         var refPath = $"{FileName}.{subFileName}";
