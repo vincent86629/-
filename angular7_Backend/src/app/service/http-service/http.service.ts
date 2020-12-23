@@ -7,7 +7,7 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class HttpService {
 
-  _url = 'https://localhost:44374/';
+  _url = 'http://13.66.187.190/API/';
   _token = '';
   _role = '';
   _id = '';
