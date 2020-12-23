@@ -112,7 +112,7 @@ namespace angular_API.Controllers
                         resp.Files = data.TblReportFile.Select((a, i) => new FinanceFile
                         {
                             Id = i + 1,
-                            Path = _configuration["UploadDomain"] + "FinanceFiles/" + a.Path
+                            Path = a.Path
                         }).ToList();
                     }
                 }
