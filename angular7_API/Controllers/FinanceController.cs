@@ -109,6 +109,11 @@ namespace angular_API.Controllers
                             TotalName = a.TotalName,
                             Rows = JsonConvert.DeserializeObject<List<Row>>(a.Rows)
                         }).ToList();
+                        resp.Files = data.TblReportFile.Select((a, i) => new FinanceFile
+                        {
+                            Id = i + 1,
+                            Path = _configuration["UploadDomain"] + "FinanceFiles/" + a.Path
+                        }).ToList();
                     }
                 }
                 else //create
@@ -179,6 +184,16 @@ namespace angular_API.Controllers
                             TotalName = block.TotalName
                         });
                     }
+                    foreach (var file in data.Files)
+                    {
+                        _db.TblReportFile.Add(new TblReportFile
+                        {
+                            ReportId = report.Id,
+                            Path = file.Path,
+                            IsDelete = false,
+                            Type = ""
+                        });
+                    }
                     _db.SaveChanges();
                     resp.Code = APIReturnCode.Success;
                     resp.Message = report.Id.ToString();
@@ -187,6 +202,7 @@ namespace angular_API.Controllers
                 else
                 {
                     var report = _db.TblReport.Include(a => a.TblReportDetail)
+                                              .Include(a => a.TblReportFile)
                                               .FirstOrDefault(a => a.Id == data.Id);
                     if (report != null)
                     {
@@ -200,6 +216,8 @@ namespace angular_API.Controllers
                         report.BankSaving = JsonConvert.SerializeObject(data.BankSaving);
                         report.UpdateTime = now;
                         _db.TblReportDetail.RemoveRange(report.TblReportDetail);
+                        _db.TblReportFile.RemoveRange(report.TblReportFile);
+
                         foreach (var block in data.Blocks)
                         {
                             _db.TblReportDetail.Add(new TblReportDetail
@@ -209,6 +227,16 @@ namespace angular_API.Controllers
                                 Rows = JsonConvert.SerializeObject(block.Rows),
                                 Total = block.Total,
                                 TotalName = block.TotalName
+                            });
+                        }
+                        foreach (var file in data.Files)
+                        {
+                            _db.TblReportFile.Add(new TblReportFile
+                            {
+                                ReportId = report.Id,
+                                Path = file.Path,
+                                IsDelete = false,
+                                Type = ""
                             });
                         }
                         _db.SaveChanges();
