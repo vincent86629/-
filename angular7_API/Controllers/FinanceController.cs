@@ -274,7 +274,7 @@ namespace angular_API.Controllers
                     return Ok(new APIReturn()
                     {
                         Code = APIReturnCode.Success,
-                        Message = _configuration["UploadDomain"] + PicUrl
+                        Message = _configuration["UploadDomain"] + TypeName + "/" + PicUrl
                     }); ;
                 }
                 else
