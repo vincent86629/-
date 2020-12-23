@@ -39,6 +39,8 @@ namespace angular_API.Model.PageModel
             public int CreateBy { get; set; }
             public List<Row> BankSaving { get; set; }
             public List<Block> Blocks { get; set; }
+            public List<FinanceFile> Files { get; set; }
+
             public FinanceEditData()
             {
                 BankSaving = new List<Row>();
@@ -53,7 +55,11 @@ namespace angular_API.Model.PageModel
             public string TotalName { get; set; }
             public int Total { get; set; }
             public List<Row> Rows { get; set; } = new List<Row>();
-
+        }
+        public class FinanceFile
+        {
+            public int Id { get; set; }
+            public string Path { get; set; }
         }
         public class Row
         {

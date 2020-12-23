@@ -49,9 +49,6 @@ export class FinanceEditComponent implements OnInit {
     this.httpService.post<any>('api/Finance/GetFinanceEditData', this.id).subscribe(
       (data: FinanceEditData) => {
         this.data = data;
-        this.data.files = [];
-
-        console.log(this.data.files);
         if (this.data.createBy != 0) {
           this.isCreator = this.data.createBy == this.appService.loginResponse.adminInfo.id;
         } else {
@@ -82,7 +79,6 @@ export class FinanceEditComponent implements OnInit {
     this.expenses = this.data.blocks[3].total;
     this.data.thisMonthBalance = this.data.lastMonthBalance + this.income - this.expenses + this.data.blocks[4].total - this.data.blocks[5].total;
     this.total = this.data.thisMonthBalance + this.data.bankSaving.reduce(function (a, b) { return +a + +b.value }, 0);
-    console.log(this.total);
   }
   permissionChange() {
     this.permissionName = this.permissionOptions.find(a => a.value == this.data.permission).text;
