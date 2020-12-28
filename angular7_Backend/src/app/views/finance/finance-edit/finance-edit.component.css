@@ -15,3 +15,11 @@ td input {
 .image {
     width: 100%;
 }
+
+.title {
+    background-color: #f2ab39 !important;
+}
+
+.caculate {
+    background-color: yellow !important;
+}

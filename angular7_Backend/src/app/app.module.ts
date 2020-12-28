@@ -18,7 +18,8 @@ import {
   MatDatepickerModule,
   MatSelectModule,
   MAT_DATE_LOCALE,
-  MatDialogModule
+  MatDialogModule,
+  MAT_DATE_FORMATS
 } from '@angular/material';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
@@ -32,6 +33,18 @@ import { VerifycodeComponent } from './shared/verifycode/verifycode.component';
 import { FinanceListComponent } from './views/finance/finance-list/finance-list.component';
 import { FinanceEditComponent } from './views/finance/finance-edit/finance-edit.component';
 import { AddPostDialogComponent } from './shared/add-post-dialog/add-post-dialog.component';
+
+export const CUSTOM_DATE_FORMAT = {
+  parse: {
+    dateInput: 'YYYY/MM/DD',
+  },
+  display: {
+    dateInput: 'MM/DD',
+    monthYearLabel: 'YYYY MMM',
+    dateA11yLabel: 'YYYY/MM/DD',
+    // monthYearA11yLabel: 'YYYY MMMM',
+  },
+};
 
 @NgModule({
   imports: [
@@ -74,7 +87,8 @@ import { AddPostDialogComponent } from './shared/add-post-dialog/add-post-dialog
   ],
   providers: [
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
-    { provide: MAT_DATE_LOCALE, useValue: 'zh-TW' }
+    { provide: MAT_DATE_LOCALE, useValue: 'zh-TW' },
+    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMAT }
   ]
 })
 export class MaterialModule { }

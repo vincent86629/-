@@ -45,7 +45,7 @@ namespace angular_API.Model.PageModel
             {
                 BankSaving = new List<Row>();
                 Blocks = new List<Block>();
-
+                Files = new List<FinanceFile>();
             }
 
         }
