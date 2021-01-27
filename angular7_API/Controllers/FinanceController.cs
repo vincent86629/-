@@ -135,7 +135,7 @@ namespace angular_API.Controllers
                         var addRows = new List<Row>();
                         switch (block.BlockName)
                         {
-                            case "本月應付款項":
+                            case "銀行匯出/扣款":
                                 addRows.Add(new Row() { Name = "物管服務費" });
                                 addRows.Add(new Row() { Name = "保全服務費" });
                                 addRows.Add(new Row() { Name = "清潔服務費" });
