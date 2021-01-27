@@ -132,7 +132,26 @@ namespace angular_API.Controllers
                     resp.Blocks.Add(new Block { BlockName = "零用金支出", TotalName = "零用金支出" });
                     foreach (var block in resp.Blocks)
                     {
-                        block.Rows.AddRange(emptyRows);
+                        var addRows = new List<Row>();
+                        switch (block.BlockName)
+                        {
+                            case "本月應付款項":
+                                addRows.Add(new Row() { Name = "物管服務費" });
+                                addRows.Add(new Row() { Name = "保全服務費" });
+                                addRows.Add(new Row() { Name = "清潔服務費" });
+                                addRows.Add(new Row() { Name = "電梯服務費" });
+                                addRows.Add(new Row() { Name = "弱電服務費" });
+                                addRows.Add(new Row() { Name = "機電服務費" });
+                                for (int i = 0; i < 9; i++)
+                                {
+                                    addRows.Add(new Row());
+                                }
+                                break;
+                            default:
+                                addRows = emptyRows;
+                                break;
+                        }
+                        block.Rows.AddRange(addRows);
                     }
 
                     resp.BankSaving.Add(new Row());
